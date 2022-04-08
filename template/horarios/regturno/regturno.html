@@ -1,0 +1,112 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'listurno' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+                
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-xs-12">
+                <div class="white-box">
+                        <form class="form-horizontal form-material" action="{% url 'guardarturno'%}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-3">Horario</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="h" value="{{h}}"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3">Seleccione el dia</label>
+                                    <div class="col-sm-9">
+                                        <select name="d" class="form-control form-control-line" >
+                                            <option >Elegir dia </option>
+                                            <option value="Lunes" >Lunes</option>
+                                            <option value="Martes" >Martes</option>
+                                            <option value="Miercoles" >Miercoles</option>
+                                            <option value="Jueves" >Jueves</option>
+                                            <option value="Viernes" >Viernes</option>
+                                            <option value="Sabado" >Sabado</option>
+                                            <option value="Domingo" >Domingo</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Seleccione rango de horas</label>
+                                    <div class="col-sm-9">
+                                        <select name="r" class="form-control form-control-line">
+                                            <option >Elegir rango de hora</option>
+                                            {% for o in r %}
+                                            <option value="{{o.id}} " >{{o.rango_hora}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>                                                                
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success"><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <div class="">
+                                        <h4>Turnos registrados </h4>
+                                        <h5>Esta lista muestra los dias de la semana con sus horarios</h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Dia del turno</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango de horas</th>
+                                                    <th>Editar</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if t %}
+                                                    {% for i in t%}
+                                                    <tr>
+                                                        <td>{{i.id}}</td>
+                                                        <td>{{i.dia}}</td>
+                                                        <td>{{i.horario}}</td>
+                                                        <td>{{i.rango_hora}}</td>
+                                                        <td><a href="{% url 'editarturno' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+
+    </div>
+</div>
+{% endblock%}

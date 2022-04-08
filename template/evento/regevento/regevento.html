@@ -1,0 +1,104 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_evento' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %} 
+        {% if msgy %}
+                              <div class="alert alert-info" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Mensaje : </strong>{{ msgy }}
+                              </div>
+               		{% endif %}            
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="white-box">
+                <form class="form-horizontal form-material" action="{% url 'reg_evento'%}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-3">Nombre de empleado</label>
+                                    <div class="col-md-9">
+                                        <select name="empleado" class="form-control form-control-line" required="required">
+                                            <option >Elegir Empleado </option>
+                                            {% for d in lempleado %}
+                                            <option value="{{d.id}} " >{{d}}</option>
+                                            {% endfor%}
+                                        </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Seleccione el codigo de evento</label>
+                                    <div class="col-sm-9">
+                                        <select name="codevento" class="form-control form-control-line" required="required">
+                                            <option >Elegir codigo de evento </option>
+                                            {% for d in codigoevento %}
+                                            <option value="{{d.id}} " >{{d.cod_evento}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Autorizado por:</label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="aupor" placeholder="Nombre de quien autoriza o emite documento"
+                                                class="form-control form-control-line" required="required">  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Descripcion de evento:</label>
+                                    <div class="col-sm-9">
+                                       <textarea cols="50" rows="4" spellcheck="true" name="desc" class="form-control form-control-line"></textarea>
+                                    </div>
+                                </div> 
+                                 <div class="form-group">
+                                    <label class="col-sm-3">Fecha de inicio</label>
+                                    <div class="col-sm-9">
+                                       <input type="date" name="fecha1" class="form-control form-control-line" required="required">  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Fecha de finalizacion</label>
+                                    <div class="col-sm-9">
+                                       <input type="date" name="fecha2" class="form-control form-control-line" required="required">  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3">Usuario que realiza el registro</label>
+                                    <div class="col-md-9">
+                                        <input id="usu_reg" readonly="readonly" type="text" name="usu_reg" value="{{user.get_username}}" placeholder="{{user.get_username}}"
+                                            class="form-control form-control-line" required="required"> 
+                                        </div>
+                                </div>                                                              
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

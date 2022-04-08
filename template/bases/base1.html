@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>{% block head %} {% endblock %}</title>
+    {% load static %}
+    
+    <!-- Favicon icon -->
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css'%}" rel="stylesheet">
+    <!-- Menu CSS -->
+  </head>
+  {% block link %}
+  {% endblock %}
+  {% load static %}
+  <body background ="{% static 'plugins/images/R.png' %}");>
+  <div class="preloader">
+        <div class="cssload-speeding-wheel"></div>
+  </div>
+  <div>
+    {% block body %} 
+  
+      {% endblock %}
+  </div>
+<!-- jQuery -->
+{% load static %}
+    <script src="{% static 'plugins/bower_components/jquery/dist/jquery.min.js'%}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js'%}"></script>
+    <!--slimscroll JavaScript -->
+    <script src="{% static 'js/jquery.slimscroll.js'%}"></script>
+    <!--Wave Effects -->
+    <script src="{% static 'js/waves.js'%}"></script>
+    <!--Counter js -->
+    <script src="{% static 'plugins/bower_components/waypoints/lib/jquery.waypoints.js'%}"></script>
+    <script src="{% static 'plugins/bower_components/counterup/jquery.counterup.min.js'%}"></script>
+    <script type="{% static 'text/javascript'%}">
+        $(document).ready(function () {
+            $.toast({
+                heading: 'Bienbenido a USAM',
+                text: 'Use el predefinido',
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'info',
+                hideAfter: 3500,
+                stack: 6
+            })
+        });
+    </script>
+
+  </body>
+</html>

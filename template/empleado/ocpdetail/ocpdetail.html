@@ -1,0 +1,69 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Editar | Ocupacion {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'registrarocupacion' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Editar ocupacion</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="col-xl-12">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-material" action="{% url 'actualizarocupacion'%}" method="POST" >
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="col-md-2">Id</label>
+                                        <div class="col-md-10">
+                                            <input type="text" name="id" value="{{ocp.id}}" readonly="readonly"
+                                                class="form-control form-control-line" required="required"> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2">Editar ocupacion</label>
+                                        <div class="col-md-10">
+                                            <input type="text" name="nom" value="{{ocp.nom_ocupacion}}"
+                                                class="form-control form-control-line" required="required"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <div class="col-sm-12">
+                                        </div>
+                                    </div>
+                                                                                                
+                                    <div class="form-group">
+                                        <div class="col-xl-12">
+                                            <button class="btn btn-success"><h5>Guardar</h5></button>
+                                        </div>
+                                    </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

@@ -1,0 +1,56 @@
+{% extends 'bases/base3.html' %}
+{% block head %} Inicio {% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+
+{% block paginas %}
+<section >
+    <div class="container">
+        <div class="row bg-title">
+            <div class="white-box text-center">
+                <h1 class="page-title">Bienvenido</h1>
+                <h2 class="page-title">Reface es un sitio donde puedes administrar entrada y salida del personal</h2>
+            </div>                                
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xl-12 ">
+            <h4 align="center" class="page-title">Elija la unidad o punto de control a activar</h4>
+        </div>
+        
+            <div class="col-xl-12">
+                <div class="white-box">
+                    <form  class="form-horizontal form-material" action="{% url 'recibir_url'%}" method="POST" >
+                                    {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-md-2">Elija la unida a activar</label>
+                            <div class="col-md-10">
+                                <select name="t" class="form-control form-control-line" >
+                                    {% for d in context %}
+                                        <option value="{{d.id}} " >{{d.unidad_control}}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                        </div>                                                                                              
+                        <div class="form-group">
+                            <div class="col-xl-12">
+                                <button class="btn btn-danger btn-block btn-rounded waves-effect waves-light "><h5 class="text-center" ><b>INICIAR SISTEMA DE MARCACION POR RECONOCIMIENTO FACIAL</b></h5></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+       
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Lista | Marcacion tardias y temprana {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xs-4">
+            <a class="btn btn-success" href="{% url 'menu_marcaciones' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-4" align="center">
+            <h4 class="page-title">Lista Marcacion del dia, </h4> <strong>{{ fecha |date:'d/M/Y'}}</strong>
+        </div>
+        
+
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <h4 align="center">Justificar entradas tardias</h4>
+                                    <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango hora</th>
+                                                    <th>Hora entrada</th>
+                                                    <th>Hora salida</th>
+                                                    <th>Minutos entrada</th>
+                                                    <th>Minutos salida</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        {% if i.entrada_tardia %}
+                                                            <td>{{i.id}}</td>
+                                                            <td>{{i.empleado}}</td>
+                                                            <td>{{i.horario }}</td>
+                                                            <td>{{i.rango_horario}}</td>
+                                                            <td>{{i.hora_entrada |time:"h:i a"}}</td>
+                                                            <td>{{i.hora_salida |time:"h:i a"}}</td>
+                                                            {% if i.entrada_tardia %}
+                                                                    <td bgcolor="#ff9966"><strong>-{{i.minutos_entrada_menos}}</strong></td>
+                                                            {% else %}
+                                                                    <td><strong>{{i.minutos_entrada_mas}}</strong></td>
+                                                            {% endif %}
+                                                            {% if i.salida_temprana %}
+                                                                <td bgcolor="#ff9966"><strong>-{{i.minutos_salida_menos}}</strong></td>
+
+                                                            {% else %}
+                                                                <td><strong>{{i.minutos_salida_mas}}</strong></td>
+                                                            {% endif %}
+                                                            <td><a href="{% url 'justificar' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        <h4 align="center">Justificar salidas temprana</h4>
+                                    <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango hora</th>
+                                                    <th>Hora entrada</th>
+                                                    <th>Hora salida</th>
+                                                    <th>Minutos entrada</th>
+                                                    <th>Minutos salida</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        {% if i.salida_temprana %}
+                                                            <td>{{i.id}}</td>
+                                                            <td>{{i.empleado}}</td>
+                                                            <td>{{i.horario }}</td>
+                                                            <td>{{i.rango_horario}}</td>
+                                                            <td>{{i.hora_entrada |time:"h:i a"}}</td>
+                                                            <td>{{i.hora_salida |time:"h:i a"}}</td>
+                                                            {% if i.entrada_tardia %}
+                                                                    <td bgcolor="#ff9966"><strong>-{{i.minutos_entrada_menos}}</strong></td>
+                                                            {% else %}
+                                                                    <td><strong>{{i.minutos_entrada_mas}}</strong></td>
+                                                            {% endif %}
+                                                            {% if i.salida_temprana %}
+                                                                <td bgcolor="#ff9966"><strong>-{{i.minutos_salida_menos}}</strong></td>
+
+                                                            {% else %}
+                                                                <td><strong>{{i.minutos_salida_mas}}</strong></td>
+                                                            {% endif %}
+                                                            <td><a href="{% url 'justificar' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        <p>En la lista aparecen dos cuadros, uno para entradas tardias y otra para salidas 
+                                        temprana, la justificacion es valida para ambos debe de estamparse segun los lineamientos de administracion
+                                        y cambiarse a el campo de entrada tardia o salida temprana a NO</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

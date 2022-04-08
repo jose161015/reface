@@ -1,0 +1,103 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Justificar | Ausencia {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-2 ">
+            <a class="btn btn-success" href="{% url 'menu_marcaciones' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-10 ">
+            <h4 align="center" class="page-title">Destalle de Ausencia</h4>
+        </div>         
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-xl-12">
+                <div class="white-box">
+                    <div class="form-group">
+                        <h4 align="center" class="page-title">Importante: Al justificar una 
+                            ausencia debera de seleccionar SI en el campo justificar, de lo 
+                            contrario continuara apareciendo en los reporte de ausencias sin justificar, conforme los lineamientos 
+                            de la administracion
+                        </h4>
+                    </div>
+                    <form class="form-horizontal form-material" method="POST" action="{% url 'actualizarausencia'%}">
+                        {% csrf_token %}
+                        <b>
+                        <div class="form-group">
+                            <label class="col-xs-1">Id registro</label>
+                            <div class="col-xs-1">
+                                <input  readonly="readonly" name="id" type="text" value="{{au.id}}" class="form-control form-control-line">   
+                            </div>
+                            <label class="col-md-2">Nombre del Empleado</label>
+                            <div class="col-sm-8">
+                                <input  readonly="readonly" type="text" value="{{au.empleado}}"class="form-control form-control-line">   
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2">Horario asignado</label>
+                            <div class="col-md-2">
+                                <input type="text" value="{{au.horario}}"class="form-control form-control-line"required="required" readonly="readonly"> 
+                            </div>
+                            <label class="col-md-2">Detalle del turno o rango de hora</label>
+                            <div class="col-md-2">
+                                <input type="text" value="{{au.rango_hora}}" class="form-control form-control-line"required="required" readonly="readonly"> 
+                            </div>
+                            <label class="col-md-2">Fecha que falto al trabajo</label>
+                            <div class="col-md-2">
+                                <input type="text" value="{{au.fecha|date:"d M Y"}}" class="form-control form-control-line"required="required" readonly="readonly"> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        
+                            <label class="col-md-6">Justificar la ausencia a sus labores</label>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <select class="selectpicker form-control form-control-line" data-style="text-danger" name="esta" class="form-control form-control-line" required="required">
+                                        <option value="{{au.esta_faltando}}" > NO</option>
+                                        <option value="0" >SI</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-2">Fecha de registro</label>
+                            <div class="col-md-4">
+                                <input type="text" name="fecha" value="{% now "Y-m-d" %}"class="form-control form-control-line"required="required" readonly="readonly"> 
+                            </div>
+                            <label class="col-md-2">Usuario que registra</label>
+                            <div class="col-md-4">
+                                <input type="text" name="usu" value="{{user.get_username}}"class="form-control form-control-line"required="required" readonly="readonly"> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2">Justificacion</label>
+                            <div class="col-md-10 ">
+                                <textarea cols="50" rows="4" spellcheck="true" name="just" class="form-control form-control-line">{{event.justificacion}}</textarea>
+                            </div>
+                        </div>                                                                                         
+                        <div class="form-group">
+                            <div class="col-xl-12">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

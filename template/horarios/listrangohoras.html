@@ -1,0 +1,117 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | RangoHoras {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_horarios' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="col-xl-12">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-material" action="{% url 'regrangohoras'%}" method="POST" >
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="col-md-2">ingrese una nueva rango de horas</label>
+                                        <div class="col-md-10">
+                                            <input type="text" id="appt" name="rango" placeholder="Ingrese un rango de hora, ejemplo: 06:00 a 12:00"
+                                                class="form-control form-control-line"required="required"> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2">ingrese hora de inicio</label>
+                                        <div class="col-sm-10">
+                                        <input type="time" id="appt" name="hi" placeholder="Ingrese hora de inicio turno"
+                                                class="form-control form-control-line"required="required">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2">ingrese hora de finalizacion</label>
+                                        <div  class="col-sm-10 " >
+                                        <input type="time" name="hf" placeholder="Ingrese hora de finalizacion de turno"
+                                                class="form-control form-control-line" required="required">
+                                        </div>
+                                    </div>
+                                                                                                
+                                    <div class="form-group">
+                                        <div class="col-xl-12">
+                                            <button class="btn btn-success"><h5>Guardar</h5></button>
+                                        </div>
+                                    </div>
+                    </form>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <div class="">
+                                        <h4>Rango de horas registradas </h4>
+                                        <h5>Si hay un rango de hora que no está registrado, agréguelo en el formulario arriba </h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Rango de horas</th>
+                                                    <th>Hora de inicio</th>
+                                                    <th>Hora de finalización</th>
+                                                    <th>editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if listarango %}
+                                                    {% for i in listarango%}
+                                                    <tr>
+                                                        <td>{{i.rango_hora}}</td>
+                                                        <td>{{i.hora_inicio |time:"h:i a"}}</td>
+                                                        <td>{{i.hora_fin|time:"h:i a"}}</td>
+                                                        <td><a href="{% url 'editarhoras' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+  $('#reloj').clockpicker({
+    autoclose: true,
+    twelvehour: true
+  });
+});
+</script>
+{% endblock%}

@@ -1,0 +1,152 @@
+{% extends 'bases/base.html' %}
+{% block head %} Menu | Horarios {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+
+{% block body %}
+
+
+<nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg "
+                    href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i
+                        class="fa fa-bars"></i></a>
+                <div class="top-left-part"><a class="logo" href="{% url 'index' %}"><b><img
+                                    {% load static %}
+                                src="{% static 'plugins/images/logo.png'%}" alt="home" /></b><span
+                            class="hidden-xs"><img src="{% static 'plugins/images/reface.png'%}" alt="home" /></span></a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
+                    <li>
+                        <form role="search" class="app-search hidden-xs" method="GET" action="{% url 'empleadodetalle'%}">
+                            <label>Buscar empleado por numero de carnet :</label>
+                            <input type="text" name="id" placeholder="Numero de carnet" required="required"class="form-control"><button class="btn btn-success " ><i
+                                    class="fa fa-search"></i></button>
+                                    
+                        </form>
+                        {% if error %}
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Error de solicitud : </strong>{{ error }}
+                              </div>
+               			{% endif %}
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                    <li>                                            
+                        <a class="profile-pic" href="#"> <b class="hidden-xs">{{user.get_username}}</b> </a>
+                    </li>
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'logout' %}"> <b class="hidden-xs">Cerrar sesion</b> </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- inicio de menu admin istracion de empleado -->
+            {% block  menu%}
+            <div class="row">
+            
+                        <!-- Registrar empleado -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro rango de horas</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'listrangohoras' %}">
+                                        <img  {% load static %} src="{% static 'plugins/images/rango_horas.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar empleado -->
+                        <!-- Listar empleado -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro de tipo de horarios</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'regtipohorario'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/tipo_horario.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Listar empleado -->
+                        <!-- Registrar Departamento -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro horarios</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'listhorario'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/horario.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Departamento-->
+                        <!-- Registrar Ocupacion -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro de turnos de trabajo</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'listurno'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/trabajar.png'%}" alt="img" width="110" height="100" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Ocupacion -->
+                        <!-- Registrar Ocupacion -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-8"> 
+                                        <h4 >Asignacion de horarios a empleados</h4>    
+                                    </div>
+                                    <div class="col-sm-4 col-xs-4" align="right">
+                                    <a href="{% url 'listasignarhorarios'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/asignar.png'%}" alt="img" width="110" height="100" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Ocupacion -->
+                        <!-- Registrar Ocupacion -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-8"> 
+                                        <h4 >Registro y administracion de asuetos</h4>    
+                                    </div>
+                                    <div class="col-sm-4 col-xs-4" align="right">
+                                    <a href="{% url 'asuetolist'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/vacaciones.png'%}" alt="img" width="110" height="100" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Ocupacion -->
+            <!-- fin de menu administracion de empleado -->           
+            </div>
+        {% endblock%}
+            {% endblock %}

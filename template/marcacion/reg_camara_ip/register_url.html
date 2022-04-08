@@ -1,0 +1,67 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_marcaciones' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            
+            <div class="col-xs-12">
+                <div class="white-box">
+                <form class="form-horizontal form-material" action="{% url 'reg_camara_ip'%}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-4">Nombre de punto o unidad de control</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="unidad" placeholder="Nombre de punto o unidad de control"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">URL de camara ip asignada a unidad</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="url" placeholder="URL de camara ip asignada"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4">Elegir el uso que se le dara</label>
+                                    <div class="col-sm-8">
+                                        <select name="es" class="form-control form-control-line" >
+                                            <option >Elegir el uso o asignacion </option>
+                                            <option value="no" >Externo en unidades de control</option>
+                                            <option value="si" >Interna para uso del administrador</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>                                                             
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-danger btn-block btn-rounded waves-effect waves-light "><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

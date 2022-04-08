@@ -1,0 +1,95 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Lista | Marcacion {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xs-4">
+            <a class="btn btn-success" href="{% url 'menu_marcaciones' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-4" align="center">
+            <h4 class="page-title">Lista Marcacion del dia, </h4> <strong>{% now "d /M /Y" %}</strong>
+        </div>
+        
+
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango hora</th>
+                                                    <th>Hora entrada</th>
+                                                    <th>Hora salida</th>
+                                                    
+                                                    <th>Minutos entrada</th>
+                                                    <th>Minutos salida</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lmarcacion %}
+                                                    {% for i in lmarcacion%}
+                                                    <tr>
+                                                        <td>{{i.empleado}}</td>
+                                                        <td>{{i.horario }}</td>
+                                                        <td>{{i.rango_horario}}</td>
+                                                        <td>{{i.hora_entrada |time:"h:i a"}}</td>
+                                                        <td>{{i.hora_salida |time:"h:i a"}}</td>
+                                                        {% if i.entrada_tardia %}
+                                                                <td bgcolor="#ff9966"><strong>-{{i.minutos_entrada_menos}}</strong></td>
+                                                        {% else %}
+                                                                <td><strong>{{i.minutos_entrada_mas}}</strong></td>
+                                                        {% endif %}
+                                                        {% if i.salida_temprana %}
+                                                            <td bgcolor="#ff9966"><strong>-{{i.minutos_salida_menos}}</strong></td>
+
+                                                        {% else %}
+                                                            <td><strong>{{i.minutos_salida_mas}}</strong></td>
+                                                        {% endif %}
+
+                                                        
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+  $('#reloj').clockpicker({
+    autoclose: true,
+    twelvehour: true
+  });
+});
+</script>
+{% endblock%}

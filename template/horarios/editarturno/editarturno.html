@@ -1,0 +1,88 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Editar | Turnos {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'listrangohoras' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de Actualizacion</h4>
+        </div>
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="col-xl-12">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-material" action="{% url 'actualizarturno'%}" method="POST" >
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="col-sm-3">Id</label>
+                                        <div class="col-sm-9" >
+                                            <input type="text" name="id" value="{{t.id}}"readonly="readonly" class="form-control form-control-line">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="col-sm-3">Seleccione el dia</label>
+                                    <div class="col-sm-9">
+                                        <select name="d" class="form-control form-control-line" >
+                                            <option >{{t.dia}}</option>
+                                            <option value="Lunes" >Lunes</option>
+                                            <option value="Martes" >Martes</option>
+                                            <option value="Miercoles" >Miercoles</option>
+                                            <option value="Jueves" >Jueves</option>
+                                            <option value="Viernes" >Viernes</option>
+                                            <option value="Sabado" >Sabado</option>
+                                            <option value="Domingo" >Domingo</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3">Horario</label>
+                                        <div class="col-sm-9">
+                                            <select name="h" class="form-control form-control-line" >
+                                                <option value="{{t.horario.id}}" >{{t.horario}}</option>
+                                                {% for i in h%}
+                                                <option value="{{i.id}}" >{{i.descripcion}}</option>
+                                                {% endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3">Rango de horas</label>
+                                        <div  class="col-sm-9 " >
+                                            <select name="r" class="form-control form-control-line" >
+                                                <option value="{{t.rango_hora.id}}" >{{t.rango_hora}}</option>
+                                                {% for i in r%}
+                                                <option value="{{i.id}}" >{{i.rango_hora}}</option>
+                                                {% endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                                                                                
+                                    <div class="form-group">
+                                        <div class="col-xl-12">
+                                            <button class="btn btn-success"><h5>Guardar</h5></button>
+                                        </div>
+                                    </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

@@ -1,0 +1,89 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Lista | Asuetos {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xs-4">
+            <a class="btn btn-success" href="{% url 'menu_horarios' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-4" align="center">
+            <h4 class="page-title">Lista asuetos registradas</h4>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-xs-4" align="right">
+            <a class="btn btn-success" href="{% url 'asuetocreate' %}" ><h4 class="page-title">Registrar asuetos</h4></a>
+        </div>
+
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <div class="">                                
+                                        <h4>Asuetos registrados del año {% now "Y" %}</h4>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre del asueto</th>
+                                                    <th>Fecha de inicio</th>
+                                                    <th>Fecha de finalizacion</th>
+                                                    <th>Horarios incluidos</th>
+                                                    <th>ver detalle</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if object_list %}
+                                                    {% for i in object_list%}
+                                                        
+                                                            <tr>
+                                                                <td>{{i.nombre_asueto}}</td>
+                                                                <td>{{i.fecha_inicio }}</td>
+                                                                <td>{{i.fecha_finalizacion}}</td>
+                                                                <td>
+                                                                <ul>
+                                                                {% for u in i.tipohorario.all %}
+                                                                <li>{{u}}</li> 
+                                                                {% endfor%}
+                                                                </ul>
+                                                                </td>
+                                                                <td><a href="{% url 'asuetodetail' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Ver detalle</span></a></td>
+                                                            </tr>
+                                                        
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

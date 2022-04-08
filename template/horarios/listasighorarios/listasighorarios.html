@@ -1,0 +1,83 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Lista | Asignar horario {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xs-4">
+            <a class="btn btn-success" href="{% url 'menu_horarios' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-4" align="center">
+            <h4 class="page-title">Lista de asignaciones registradas</h4>
+        </div>
+        <div class="col-xs-4" align="right">
+            <a class="btn btn-success" href="{% url 'asignarhorarios' %}" ><h4 class="page-title">Asignar</h4></a>
+        </div>
+
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <div class="">
+                                    
+                                        <h4>Empleados con asignacion de horarios </h4>
+                                    
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Fecha inicio</th>
+                                                    <th>Fecha fin</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        <td>{{i.empleado}}</td>
+                                                        <td>{{i.horario }}</td>
+                                                        <td>{{i.fecha_inicio}}</td>
+                                                        <td>{{i.fecha_fin}}</td>
+                                                        <td><a href="{% url 'asighorariodetail' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+  $('#reloj').clockpicker({
+    autoclose: true,
+    twelvehour: true
+  });
+});
+</script>
+{% endblock%}

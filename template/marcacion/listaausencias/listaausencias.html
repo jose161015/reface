@@ -1,0 +1,120 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Lista | ausencias{% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-xs-4">
+            <a class="btn btn-success" href="{% url 'menu_marcaciones' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-xs-4" align="center">
+            <h4 class="page-title">Lista Ausencias del mes , </h4> <strong>{{ mes|date:"M/Y"}}</strong>
+        </div>
+        
+
+    </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row bg-title">
+            <div class="col-md-12 col-xs-12">
+                <div class="white-box">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <h4 align="center">Ausencias sin Justificar</h4>
+                                    <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango hora</th>
+                                                    <th>Fecha</th>
+                                                    <th>Justificacion</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        {% if i.esta_faltando %}
+                                                            <td>{{i.id}}</td>
+                                                            <td>{{i.empleado}}</td>
+                                                            <td>{{i.horario }}</td>
+                                                            <td>{{i.rango_hora}}</td>
+                                                            <td>{{i.fecha |date:"d/M/Y"}}</td>
+                                                            <td bgcolor="#ff9966"><strong>No tiene</strong></td>
+                                                            <td><a href="{% url 'detalleausencia' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        <p>En el cuadro arriba estan listada las ausencias por mes de consulta si estan justificada segun las normas de la administracion no se podran modificar
+                                        , solo el admonistrador podra modificarlas con sus credenciales de lo contrario el usuario podra registrar la justificacion segun normas y 
+                                        al guardar debera asegurarse que en campo justifica poner si de lo contrario segira apareciendo en los reportes de ausencia </p>
+                                        <h4 align="center">Ausencias justificadas</h4>
+                                    <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Empleado</th>
+                                                    <th>Horario</th>
+                                                    <th>Rango hora</th>
+                                                    <th>Fecha</th>
+                                                    <th>Justificacion</th>
+                                                    <th>Fecha que justifico</th>
+                                                    <th>Usuario que ingreso datos</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        {% if i.esta_faltando %}
+                                                        {% else %}
+                                                            <td>{{i.id}}</td>
+                                                            <td>{{i.empleado}}</td>
+                                                            <td>{{i.horario }}</td>
+                                                            <td>{{i.rango_hora}}</td>
+                                                            <td>{{i.fecha |date:"d/M/Y"}}</td>
+                                                            <td>{{i.justificacion_ausencia}}</td>
+                                                            <td>{{i.fecha_modificacion}}</td>
+                                                            <td>{{i.usuario_modfico}}</td>
+                                                            
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

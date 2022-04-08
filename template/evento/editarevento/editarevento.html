@@ -1,0 +1,104 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Editar | Evento {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_evento' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %} 
+        {% if msgy %}
+                              <div class="alert alert-info" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Mensaje : </strong>{{ msgy }}
+                              </div>
+               		{% endif %}            
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="white-box">
+                <form class="form-horizontal form-material" action="{% url 'actualizar'%}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-3">id</label>
+                                    <div class="col-md-9">
+                                       <input type="text" name="id" value="{{event.id}}" placeholder="{{event.id}}"
+                                                class="form-control form-control-line" readonly="readonly">  
+                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3">Nombre de empleado</label>
+                                    <div class="col-md-9">
+                                       <input type="text"  value="{{event.empleado}}" placeholder="{{event.empleado}}"
+                                                class="form-control form-control-line" readonly="readonly">  
+                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Codigo de evento</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" value="{{event.codigo_evento}}" placeholder="{{event.codigo_evento}}"
+                                                class="form-control form-control-line" readonly="readonly"> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Autorizado por:</label>
+                                    <div class="col-sm-9">
+                                       <input type="text" name="aupor" value="{{event.autorizado_por}}" placeholder="{{event.autorizado_por}}"
+                                                class="form-control form-control-line" >  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Descripcion de evento:</label>
+                                    <div class="col-sm-9">
+                                       <textarea cols="50" rows="4" spellcheck="true" name="desc" class="form-control form-control-line">{{event.justificacion}}</textarea>
+                                    </div>
+                                </div> 
+                                 <div class="form-group">
+                                    <label class="col-sm-3">Fecha de inicio</label>
+                                    <div class="col-sm-9">
+                                       <input type="text"  class="form-control form-control-line" placeholder="{{event.fecha_inicio}}" readonly="readonly">  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3">Fecha de finalizacion</label>
+                                    <div class="col-sm-9">
+                                       <input type="text"  class="form-control form-control-line" placeholder="{{event.fecha_fin}}" readonly="readonly">  
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3">Usuario que realiza el registro</label>
+                                    <div class="col-md-9">
+                                        <input id="usu_reg" readonly="readonly" type="text" placeholder="{{event.usuario_registro}}"
+                                            class="form-control form-control-line" > 
+                                        </div>
+                                </div>                                                              
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

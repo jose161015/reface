@@ -1,0 +1,78 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Listado | Eventos {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+
+<div class="row bg-title">
+                    <div class="col-xs-12">
+                        <h3 align="center" class="page-title">Modulo de Eventos</h3>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="col-xs-12">
+                        <h3 align="center" class="page-title">Modulo marcación</h3>
+                        <h4 class="box-title">Rango del reporte :</h4>
+                        <form metghod="GET" action="{% url 'eventorangopdf' %}" >
+                                    <label>Desde :</label>
+                                    <input class="form__input" type"text" name="fecha1" value="{{fecha1}}" readonly="readonly"> 
+                                    <label>Hasta:</label>
+                                    <input class="form__input" type="text" name="fecha2" value="{{fecha2}}"readonly="readonly">
+                                    <input type="submit" value="Generar PDF" class="btn">
+                        </form>
+                    </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <a href="{% url 'menu_evento' %}" class="btn btn-success">Regresar</a>
+                    </div>
+                </div>
+                                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title">Cantidad de Registros:  {{count}}</h3>
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>EMPLEADO</th>
+                                            <th>CODIGO EVENTO</th>
+                                            <th>AUTORIZA</th>
+                                            <th>FECHA INICIO</th>
+                                            <th>FECHA FIN</th>
+                                            <th>FECHA DE REGISTRO</th>
+                                            <th>USUARIO REGISTRO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if registro_rango %}
+                                            {% for reg in registro_rango %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{reg.empleado}}</td>
+                                            <td>{{reg.codigo_evento}}</td>
+                                            <td>{{reg.autorizado_por}}</td>
+                                            <td>{{reg.fecha_inicio}}</td>
+                                            <td>{{reg.fecha_fin}}</td>
+                                            <td>{{reg.fecha_registro}}</td>
+                                            <td>{{reg.usuario_registro}}</td>
+                                        </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td class="alert" > <h1 color="bt btn-success" >No hay registros </h1> </td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}

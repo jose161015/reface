@@ -1,0 +1,169 @@
+{% extends 'bases/base.html' %}
+{% block head %} Menu | Evento {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+
+{% block body %}
+
+
+<nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg "
+                    href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i
+                        class="fa fa-bars"></i></a>
+                <div class="top-left-part"><a class="logo" href="{% url 'index' %}"><b><img
+                                    {% load static %}
+                                src="{% static 'plugins/images/logo.png'%}" alt="home" /></b><span
+                            class="hidden-xs"><img src="{% static 'plugins/images/reface.png'%}" alt="home" /></span></a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
+                    <li>
+                        <form role="search" class="app-search hidden-xs" method="GET" action="{% url 'empleadodetalle'%}">
+                            <label>Buscar empleado por numero de carnet :</label>
+                            <input type="text" name="id" placeholder="Numero de carnet" class="form-control" required="required"><button class="btn btn-success " ><i
+                                    class="fa fa-search"></i></button>
+                                    
+                        </form>
+                        {% if error %}
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Error de solicitud : </strong>{{ error }}
+                              </div>
+               			{% endif %}
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                    <li>                                            
+                        <a class="profile-pic" href="#"> <b class="hidden-xs">{{user.get_username}}</b> </a>
+                    </li>
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'logout' %}"> <b class="hidden-xs">Cerrar sesion</b> </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- inicio de menu admin istracion de empleado -->
+            {% block  menu%}
+            <div class="row">
+            
+                        <!-- Registrar empleado -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro Evento</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'reg_evento' %}">
+                                        <img  {% load static %} src="{% static 'plugins/images/registrar.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar empleado -->
+                        <!-- Listar empleado -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Administrar Eventos</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'listarevento'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/calendario.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Listar empleado -->
+                        <!-- Registrar Departamento --> 
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro Codigo de Evento</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'regcodevento'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/registrar.png'%}" alt="img" width="110" height="110" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="col-in row">
+                                    <div class="col-sm-7 col-xs-7"> 
+                                        <h4 class="text-muted vb">Consulta de eventos por rango</h4>
+                                        
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12"> 
+                                        <div class="">
+                                        <p>
+                                        Se muestra una busque de todos los eventos registrados en un rango de fecha
+                                        de inicio  
+                                        </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12" >
+                                    <form class="form-horizontal form-material" method="GET" action="{% url 'eventorango' %}"> 
+                                        <div class=" col-lg-6">
+                                        <label >Desde:</label>
+                                        <input type="date" class="form-control form-control-line" name="fecha1" required="required">
+                                        </div> 
+                                        <div class=" col-lg-6" >
+                                        <label >Hasta :</label>
+                                        <input type="date" class="form-control form-control-line" name="fecha2" required="required"></div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                        <input class="btn btn-success" type="submit" value="Consultar">
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Departamento-->
+                        <!-- Registrar Ocupacion 
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"> 
+                                        <h4 >Registro Ocupacion</h4>    
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6" align="right">
+                                    <a href="{% url 'registrarocupacion'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/ocupacion.png'%}" alt="img" width="110" height="120" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Ocupacion -->
+                        <!-- Registrar Ocupacion 
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                            <div class="white-box">
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-8"> 
+                                        <h4 >Captura de rostros y reconocimiento facial</h4>    
+                                    </div>
+                                    <div class="col-sm-4 col-xs-4" align="right">
+                                    <a href="{% url 'listasincaptura'%}">
+                                        <img  {% load static %} src="{% static 'plugins/images/rec_rostro.png'%}" alt="img" width="110" height="100" />
+                                    </a>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin registrar Ocupacion -->
+            <!-- fin de menu administracion de empleado -->           
+            </div>
+        {% endblock%}
+            {% endblock %}

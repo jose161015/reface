@@ -1,0 +1,125 @@
+{% extends 'bases/base.html' %}
+{% block head %} Menu {% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+
+{% block body %}
+  <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg "
+                    href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i
+                        class="fa fa-bars"></i></a>
+                <div class="top-left-part"><a class="logo" href="/"><b><img
+                                    {% load static %}
+                                src="{% static 'plugins/images/logo.png'%}" alt="home" /></b><span
+                            class="hidden-xs"><img src="{% static 'plugins/images/reface.png'%}" alt="home" /></span></a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
+                    <li>
+                        <form role="search" class="app-search hidden-xs" method="GET" action="{% url 'empleadodetalle'%}">
+                            <label>Buscar empleado por numero de carnet :</label>
+                            <input type="text" name="id" placeholder="Numero de carnet" class="form-control" required="required"><button class="btn btn-success " ><i
+                                    class="fa fa-search"></i></button>
+                                    
+                        </form>
+                        {% if error %}
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Error de solicitud : </strong>{{ error }}
+                              </div>
+               			{% endif %}
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+
+                {% if user.get_username %}
+                    <li>                                            
+                        <a class="profile-pic" href="#"> <b class="hidden-xs">{{user.get_username}}</b> </a>
+                    </li>
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'logout' %}"> <b class="hidden-xs">Cerrar sesion</b> </a>
+                    </li>
+                {% else %}
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'logout' %}"> <b class="hidden-xs">Inicio de sesion</b> </a>
+                    </li>
+                {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+            <!-- /.navbar-static-side -->
+        </nav>
+        
+        <!-- Left navbar-header -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+                <ul class="nav" id="side-menu">
+                    <li style="padding: 10px 0 0;">
+                        <a href="{% url 'index' %}" class="waves-effect"><i class="fa fa-clock-o fa-fw"
+                                aria-hidden="true"></i><span class="hide-menu">Inicio</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'menu_empleado' %}" class="waves-effect"><i class="fa fa-user fa-fw"
+                                aria-hidden="true"></i><span class="hide-menu">Administracion de Empleados</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'menu_evento' %}" class="waves-effect row icon-list-demo"><i class="fa fa-indent"
+                                aria-hidden="true"></i><span class="hide-menu">Administracion de Eventos</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'menu_horarios' %}" class="waves-effect"><i class="fa fa-font fa-fw"
+                                aria-hidden="true"></i><span class="hide-menu">Administracion de Horarios</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'menu_marcaciones'%}" class="waves-effect"><i class="fa fa-globe fa-fw"
+                                aria-hidden="true"></i><span class="hide-menu">Administrar marcaciones</span></a>
+                    </li>
+                    <li>
+                        <a href="" class="waves-effect">
+                        <i class="fa fa-columns fa-fw" aria-hidden="true"></i>
+                                <span class="hide-menu">Blank Page</span></a>
+                    </li>
+                    <li>
+                        <a href="" class="waves-effect"><i class="fa fa-info-circle fa-fw"
+                                aria-hidden="true"></i><span class="hide-menu">Error 404</span></a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <!-- Left navbar-header end -->
+                <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+
+                <!-- row -->
+                {% block paginas%}
+                    <section id="wrapper" class="error-page">
+                        <div class="error-box">
+                            <div class="error-body text-center">
+                                <h1>Bienvenido</h1>
+                                <h2 >{{user.get_username}}</h2>
+                                <p class="text-muted m-t-30 m-b-30">Reface-marcacion es un sitio donde puedes administrar entrada y salida del personal</p>
+                                <a href="{% url 'reconocimientofacial'%}" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">INICIAR SISTEMA DE MARCACION POR RECONOCIMIENTO FACIAL</a>
+                            </div>                                
+                        </div>
+                    </section>
+
+                {% endblock %}
+
+
+                <!-- row -->
+                
+            </div>
+            <!-- /.container-fluid -->
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+{% endblock %}

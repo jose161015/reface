@@ -1,0 +1,102 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Actualizar | Empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+            <div class="row">
+                <div class="white-box">
+                    <div class="col-xs-12">
+                        <h4 class="page-title">Formulario de Actualizacion</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <a href="{% url 'menu_empleado' %}" class="btn btn-success">Regresar</a>
+                    </div>
+                    {% if msg %}
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Error de solicitud : </strong>{{ msg }}
+                              </div>
+               		{% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+                
+                    <div class="col-md-4 col-xs-4">
+                        <div class="white-box">
+                            <div class="user-bg">
+                                <div class="overlay-box">
+                                    <div class="col-sm-12">
+                                        <a href="{% url 'tomarfoto' empleado.id %}" class="btn btn-success">Tomar Foto </a>
+                                    </div>
+                                    <div class="user-content">
+                                            {% if empleado.foto %}
+                                                <img src="{{empleado.foto.url}}" width="210" height="200" alt="img">
+                                            {% else %}
+                                                {% load static %}
+                                                <img src="{% static 'plugins/images/empleado.png' %}"
+                                                    width="180" height="180" alt="img">
+                                            {% endif %}
+                                            
+                                    </div>                                     
+                                </div>                        
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                        <div class="white-box">
+                            <form class="form-horizontal form-material" action="{% url 'actualizarempleado' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-2">Numero de carnet</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="carnet" value="{{empleado.carnet_empleado}}" placeholder="Numero de carnet"
+                                            class="form-control form-control-line" readonly="readonly"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2">Nombres</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="nombre" value="{{empleado.nombres}}" placeholder="Nombres"
+                                            class="form-control form-control-line"> </div>
+                                    <label class="col-md-2">Apellidos</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="apellido" value="{{empleado.apellidos}}" placeholder="Apellidos"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Seleccione Departamento de pertenencia</label>
+                                    <div class="col-sm-12">
+                                        <select name="departamento" class="form-control form-control-line" >
+                                            <option value="{{empleado.departamento.id}}" >{{empleado.departamento}}</option>
+                                            {% for d in departamento %}
+                                            <option value="{{d.id}} " >{{d.nom_departamento}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Seleccione ocupacion a desempeñar</label>
+                                    <div class="col-sm-12">
+                                        <select name="ocupacion" class="form-control form-control-line">
+                                            <option value="{{empleado.ocupacion.id}}"  >{{empleado.ocupacion}}</option>
+                                            {% for o in ocupacion %}
+                                            <option value="{{o.id}} " >{{o.nom_ocupacion}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>                                                                
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                
+            </div>
+{% endblock%}

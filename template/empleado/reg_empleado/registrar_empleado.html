@@ -1,0 +1,93 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_empleado' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-md-4 col-xs-12">
+                <div class="white-box">
+                    <div class="user-bg"> 
+                        <div class="overlay-box">
+                            <div class="user-content ">
+                                {% load static %}
+                                <img src="{% static 'plugins/images/empleado.png' %}" width="180" height="180" alt="img">
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xs-12">
+                <div class="white-box">
+                <form class="form-horizontal form-material" action="{% url 'registrarempleado'%}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-md-2">Numero de carnet</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="carnet" placeholder="Numero de carnet"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2">Nombres</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="nombre" placeholder="Nombres"
+                                            class="form-control form-control-line"> </div>
+                                    <label class="col-md-2">Apellidos</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="apellido"  placeholder="Apellidos"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Seleccione Departamento de pertenencia</label>
+                                    <div class="col-sm-12">
+                                        <select name="departamento" class="form-control form-control-line" >
+                                            <option >Elegir departamento </option>
+                                            {% for d in departamento %}
+                                            <option value="{{d.id}} " >{{d.nom_departamento}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Seleccione ocupacion a desempeñar</label>
+                                    <div class="col-sm-12">
+                                        <select name="ocupacion" class="form-control form-control-line">
+                                            <option >Elegir ocupacion</option>
+                                            {% for o in ocupacion %}
+                                            <option value="{{o.id}} " >{{o.nom_ocupacion}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>                                                                
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>
+                                    </div>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

@@ -1,0 +1,54 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Listado | empleado {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+
+<div class="row bg-title">
+                    <div class="col-xs-12">
+                        <h3 align="center" class="page-title">Modulo Empleados</h3>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <a href="{% url 'menu_marcaciones' %}" class="btn btn-success">Regresar</a>
+                                    </div>
+                                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Datos del empleado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if datos %}
+                                            {% for d in datos %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{d}}</td>
+                                            
+                                        </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td class="alert" > <h1 color="bt btn-success" >No hay registros </h1> </td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}

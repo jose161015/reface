@@ -1,0 +1,213 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Empleado|Detalles{% endblock %}
+
+{% block link %}
+{% load static %}
+<link href="{% static 'estilo.css'%}" rel="stylesheet">
+{% endblock %}
+{% block menu %}
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <h3 class="box-title" align="center">Datos de empleado</h3>
+                            
+                            <div class="table-responsive">
+                                <table  class="tabla_empleado">
+                                    
+                                    <tbody>
+                                        <tr>
+                                            <td  rowspan="2"><img align="center" height="100" width="120" src="{{empleado.foto.url}}" ></td>
+                                            <td colspan="2"><b>Carnet de empleado:</b></td>
+                                            <td colspan="5" align="left"> <form method="GET" action="empleadoDetalles_pdf" > <input type="text" class="form-control form-control-line" name="id" value="{{empleado.carnet_empleado}}" placeholder="{{empleado.carnet_empleado}}"> <button type="submit" class="btn" >Generara PDF</button></form></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1 "><b>Nombre: </b></td>
+                                            <td colspan="1">{{empleado.nombres}}</td>
+                                            <td><b>Apellido:</b></td>
+                                            <td colspan="4">{{empleado.apellidos}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1"><b>Ocupacion: </b></td>
+                                            <td colspan="1">{{empleado.ocupacion}}</td>
+                                            <td colspan="1"><b>Departamento: </b></td>
+                                            <td colspan="1">{{empleado.departamento.nom_departamento}}</td>
+                                            <td><b>Estado del empleado: </b></td>
+                                            {% if empleado.es_activo %}
+                                            <td colspan="4" bgcolor="00cc99" ><b>Empleado esta activo</b></td>
+                                            {% else %}
+                                            <td colspan="4" bgcolor="#ff9966"><b>Empleado esta suspendido o inactivo</b></td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr bgcolor="#D9FADC">
+                                        <td colspan="8"><h4 align="center">Horario asignados</h4></td>
+                                        </tr>
+                                        {% if asig %}
+                                            {% if asigcount > 1 %}
+                                                {% for s in asig %}
+                                                <tr> 
+                                                    <td ><b>Tipo de horario: </b></td>
+                                                    
+                                                    <td >{{s.horario.tipohorario}}</td>
+                                                    
+                                                    <td ><b>Horario asignado: </b></td>
+                                                    <td >{{s.horario}}</td>
+                                                    <td ><b>Fecha inicio : </b></td>
+                                                    <td >{{s.fecha_inicio}}</td>
+                                                    <td ><b>Fecha finalizacion : </b></td>
+                                                    <td >{{s.fecha_fin}}</td>
+                                                </tr>
+                                                {% endfor%}
+                                            {% else %}
+                                            <tr> 
+                                                <td ><b>Tipo de horario: </b></td>
+                                                
+                                                <td >{{asig.horario.tipohorario}}</td>
+                                                
+                                                <td ><b>Horario asignado: </b></td>
+                                                <td >{{asig.horario}}</td>
+                                                <td ><b>Fecha inicio : </b></td>
+                                                <td >{{asig.fecha_inicio}}</td>
+                                                <td ><b>Fecha finalizacion : </b></td>
+                                                <td >{{asig.fecha_fin}}</td>
+                                            </tr>
+                                            {% endif %}
+                                                                                <tr bgcolor="#D9FADC" >
+                                            <td colspan="8"><h4 align="center">Horarios de turnos en la semana</h4></td>
+                                        </tr>
+                                        
+                                            <tr bgcolor="#FFF8DC" >
+                                                <td><b>Dia de la semana</b></td>
+                                               <td><b>Lunes</b></td>
+                                               <td><b>Martes</b></td>
+                                               <td><b>Miercoles</b></td>
+                                               <td><b>Jueves</b></td>
+                                               <td><b>Viernes</b></td>
+                                               <td><b>Sabado</b></td>
+                                               <td><b>Domingo</b></td> 
+                                                
+                                        </tr>
+                                                
+                                        <tr >                                                
+                                                <td><b>{{tur.0}}</b></td>
+                                                {% if lunes.0 %}
+                                                <td>{{ lunes.0 }}</td>
+                                                <td>{{ martes.0 }}</td>
+                                                <td>{{ miercoles.0 }}</td>
+                                                <td>{{ jueves.0 }}</td>
+                                                <td>{{ viernes.0 }}</td>
+                                                <td>{{ sabado.0 }}</td>
+                                                <td>{{ domingo.0 }}</td>
+                                                {% else %}
+                                                <td colspan="7" align="center"><b>No hay horario asignado</b></td>
+                                                {% endif %}
+                                        </tr>
+                                                                                      
+                                                
+                                                {% if lunes.1 %}
+                                                    <tr >  
+                                                    <td><b>{{tur.1}}</b></td>
+                                                    <td>{{ lunes.1 }}</td>
+                                                    <td>{{ martes.1 }}</td>
+                                                    <td>{{ miercoles.1 }}</td>
+                                                    <td>{{ jueves.1 }}</td>
+                                                    <td>{{ viernes.1 }}</td>
+                                                    <td>{{ sabado.1}}</td>
+                                                    <td>{{ domingo.1 }}</td>
+                                                    </tr>
+                                                {% else %}
+                                                    
+                                                {% endif %} 
+
+                                            
+                                                                                     
+                                                
+                                                {% if lunes.2 %}
+                                                     <tr >  
+                                                    <td><b>{{tur.2}}</b></td>
+                                                    <td>{{ lunes.2 }}</td>
+                                                    <td>{{ martes.2 }}</td>
+                                                    <td>{{ miercoles.2 }}</td>
+                                                    <td>{{ jueves.2 }}</td>
+                                                    <td>{{ viernes.2 }}</td>
+                                                    <td>{{ sabado.2}}</td>
+                                                    <td>{{ domingo.2 }}</td>
+                                                    </tr>
+                                                {% else %}
+                                                    
+                                                {% endif %} 
+                                                
+
+                                            
+                                        
+                                        {% else %}
+                                        <tr>
+                                            <td bgcolor="ff9966" colspan="10"><h4 align="center">No hay asignacion de horarios</h4></td>
+                                        </tr>
+                                        {% endif %}
+
+                                        <tr bgcolor="#D9FADC">
+                                            <td colspan="8"><h4 align="center">Ausencias en el año</h4></td>
+                                        </tr>
+                                        <tr bgcolor="#FFF8DC">
+                                                
+                                                <td colspan="2"><b>RANGO HORA</b></td>
+                                                <td colspan="2"><b>FECHA</b></td>
+                                                <td colspan="4"><b>AUSENCIA SIN JUSTIFICAR</b></td>
+                                                
+                                        </tr>
+                                        {% if ausencia %}
+                                            {% for au in ausencia%}
+                                                <td colspan="2">{{ au.rango_hora }}</td>
+                                                <td colspan="2">{{ au.fecha }}</td>
+                                                <td colspan="4">{{ au.justificacion_ausencia }}</td>
+                                                
+
+
+                                            {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td bgcolor="#f0ffff"colspan="8"><h4 align="center">No hay regitros en el año</h4></td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr bgcolor="#D9FADC">
+                                            <td colspan="8"><h4 align="center">Llegadas tardias ó salidas temprana</h4></td>
+                                        </tr>
+                                        <tr bgcolor="#FFF8DC">
+                                                <td><b>RANGO HORA</b></td>
+                                                <td><b>fECHA</b></td>
+                                                <td><b>HORA ENTRADA</b></td>
+                                                <td><b>MINUTOS TARDES</b></td>
+                                                <td><b>HORA SALIDA </b></td>
+                                                <td><b>MINUTOS ANTES DE LA SALIDA</b></td>
+                                                <td colspan="2"><b>COMENTARIO</b></td>
+                                        </tr>
+                                        {% if tardias %}
+                                           {% for tarde in tardias %}
+                                                
+                                                <tr>
+                                                    <td>{{ tarde.rango_horario }}</td>
+                                                    <td>{{ tarde.fecha_marcacion }}</td>
+                                                    <td>{{ tarde.hora_entrada }}</td>
+                                                    <td>{{ tarde.minutos_entrada_menos }}</td>
+                                                    <td>{{ tarde.hora_salida }}</td>
+                                                    <td>{{ tarde.minutos_salida_menos }}</td>
+                                                    <td colspan="2"><b>{{ tarde.comentario }}</td>
+                                                </tr>                                               
+
+                                            {% endfor %}
+
+                                        {% else %}
+                                        <tr>
+                                            <td bgcolor="#f0ffff" colspan="8"><h4 align="center">No hay registros o llegadas tardias sin justificar en el año</h4></td>
+                                        </tr>
+                                        {% endif %}
+
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock %}

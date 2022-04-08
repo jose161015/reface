@@ -1,0 +1,58 @@
+{% extends 'bases/base.html' %}
+{% block head %}  {% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+
+{% block body %}
+  <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg "
+                    href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i
+                        class="fa fa-bars"></i></a>
+                <div class="top-left-part"><a class="logo" href="/"><b><img
+                                    {% load static %}
+                                src="{% static 'plugins/images/logo.png'%}" alt="home" /></b><span
+                            class="hidden-xs"><img src="{% static 'plugins/images/reface.png'%}" alt="home" /></span></a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
+                    
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+
+                {% if user.get_username %}
+                    <li>                                            
+                        <a class="profile-pic" href="#"> <b class="hidden-xs">{{user.get_username}}</b> </a>
+                    </li>
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'logout' %}"> <b class="hidden-xs">Cerrar sesion</b> </a>
+                    </li>
+                {% else %}
+                    <li>                                            
+                        <a class="profile-pic" href="{% url 'login' %}"> <b class="hidden-xs">Inicio de sesion</b> </a>
+                    </li>
+                {% endif %}
+                </ul>
+            </div>
+        </nav>
+                <!-- Page Content -->
+        
+            
+
+                <!-- row -->
+                {% block paginas%}
+                    
+
+                {% endblock %}
+
+
+                <!-- row -->
+                
+            
+            
+        
+        <!-- /#page-wrapper -->
+
+{% endblock %}

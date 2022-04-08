@@ -1,0 +1,106 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Horario {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="container">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <a class="btn btn-success" href="{% url 'menu_horarios' %}" ><h4 class="page-title">Regresar</h4></a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 ">
+            <h4 class="page-title">Formulario de registro</h4>
+        </div>
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                    <span aria-hidden = "true">&times;</span>
+                </button>
+                <strong >Error de solicitud : </strong>{{ msg }}
+            </div>
+        {% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="white-box">
+                    <div class="col-xl-12">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-material" action="{% url 'listhorario'%}" method="POST" >
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="col-md-2">ingrese nombre de horario</label>
+                                        <div class="col-md-10">
+                                            <input type="text" id="appt" name="d" placeholder="Ingrese un nombre de horario"
+                                                class="form-control form-control-line"required="required"> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2">Elija un tipo de horario</label>
+                                        <div class="col-sm-10">
+                                        <select name="t" class="form-control form-control-line" >
+                                            <option >Elegir tipo de horario </option>
+                                            {% for d in thorarios %}
+                                            <option value="{{d.id}} " >{{d.descripcion}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    </div>                                                                                                 
+                                    <div class="form-group">
+                                        <div class="col-xl-12">
+                                            <button class="btn btn-success"><h5>Guardar</h5></button>
+                                        </div>
+                                    </div>
+                    </form>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
+                                    <div class="">
+                                        <h4>Horarios registrados </h4>
+                                        <h5>Todos los nombres de horarios registrados seran los asignados en cada turno es de considerar que el tipo de horario es el que se tomara en cuenta para no marcar ausencias en los dias festivos o de asueto registrados</h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre horario</th>
+                                                    <th>Tipo de horario</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if lista %}
+                                                    {% for i in lista%}
+                                                    <tr>
+                                                        <td>{{i.id}}</td>
+                                                        <td>{{i.descripcion}}</td>
+                                                        <td>{{i.tipohorario}}</td>
+                                                        <td><a href="{% url 'editarhorario' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td>No hay regitros que mostrar</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+		            </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

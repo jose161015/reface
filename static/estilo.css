@@ -1,0 +1,23 @@
+.tabla_empleado{
+	padding: 20px;
+	border: 1px solid grey;
+	border-collapse: collapse;
+	text-align: left;
+	align-items: center;
+	margin-left: 20px;
+	width: 97%;
+}
+td{
+	border: 1px solid grey;
+	align-items: center;
+	border-collapse: collapse;
+	text-align: left;
+	padding: 10px;
+}
+img{
+	align: center;
+}
+.cabecera{
+	text-align: center;
+}
+ 
