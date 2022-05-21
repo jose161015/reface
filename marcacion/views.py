@@ -183,24 +183,69 @@ def entradatardia_o_salidatemprana (request):
         
     return render(request, 'marcacion/tardiasytemprana/lista_tardia_y_temprana.html',{'lista':lista,'fecha':fecha1})
 
-def justificar(request,id):
+def justificar_entrada(request,id):
     entrada=Marcacion.objects.get(id=id)
-    return render(request,'marcacion/justificar/justificar.html',{'entrada':entrada})
+    return render(request,'marcacion/justificar_entrada/justificar.html',{'entrada':entrada})
+def justificar_salida(request,id):
+    entrada=Marcacion.objects.get(id=id)
+    return render(request,'marcacion/justificar_salida/justificar.html',{'entrada':entrada})
+def justificar_entrada1(request,id,msg):
+   
+    entrada=Marcacion.objects.get(id=id)
+    return render(request,'marcacion/justificar_entrada/justificar.html',{'entrada':entrada,'msg':msg})
+def justificar_salida1(request,id,msg):
+    
+    entrada=Marcacion.objects.get(id=id)
+    return render(request,'marcacion/justificar_salida/justificar.html',{'entrada':entrada,'msg':msg})
 
-def actualizarmarcacion(request):
+def actualizarmarcacion_entrada(request):
     if request.method=='POST':
-        etardia=request.POST['etardia']
-        stemprana=request.POST['stemprana']
         id=request.POST['id']
-        w = datetime.now()
-        fecha = w.strftime('%Y-%m-%d')
-        usu=request.POST['usu']
-        just=request.POST['just']
-        if len(just)>20:
-            Marcacion.objects.filter(id=id).update(entrada_tardia=etardia,salida_temprana=stemprana,usuario_modifico=usu,fecha_modificacion=fecha,comentario=just)
-            return redirect('menu_marcaciones')
+        etardia=request.POST['etardia']
+        if etardia=="0":    
+            w = datetime.now()
+            fecha = w.strftime('%Y-%m-%d')
+            usu=request.POST['usu']
+            just=request.POST['just']
+            if len(just)>20:
+                Marcacion.objects.filter(id=id).update(entrada_tardia=etardia,                        
+                                                    usuario_just_e=usu,
+                                                    fecha_just_entrada=fecha,
+                                                    justifi_entrada=just
+                                                    )
+                return redirect('menu_marcaciones')
+            else:
+                msg="La justificacion es demasiado corta"
+                return justificar_entrada1(request,id,msg)
         else:
-            return redirect('justificar/'+id)
+            msg="No eligio justificar"
+            return justificar_entrada1(request,id,msg)
+    
+def actualizarmarcacion_salida(request):
+    msg=""
+    if request.method=='POST':
+        id=request.POST['id']
+        stemprana=request.POST['stemprana']
+        print(stemprana)
+        if stemprana=="0":
+            w = datetime.now()
+            fecha = w.strftime('%Y-%m-%d')
+            usu=request.POST['usu']
+            just=request.POST['just']
+            if len(just)>20:
+                Marcacion.objects.filter(id=id).update(
+                                                    salida_temprana=stemprana,
+                                                    usuario_just_s=usu,
+                                                    fecha_just_salida=fecha,
+                                                    justifi_salida=just
+                                                    )
+                return redirect('menu_marcaciones')
+            else:
+                msg="La justificacion es demasiado corta"
+                return justificar_salida1(request,id,msg)
+        else:
+            msg="No eligio justificar"
+            return justificar_salida1(request,id,msg)
 
 def listaausencias(request):
     if request.method=='POST':
@@ -328,14 +373,30 @@ def tardias_rango_fecha(request):
         fecha_ini=request.POST['fecha1']
         fecha_fin=request.POST['fecha2']
         minutos=[]
+        minutos1=[]
         datos=[]
+        
         if fecha_ini:
             if fecha_fin:
+                wb= Workbook()
+                ws= wb.active
+                ws['A1']='SUMATORIA DE MINUTOS DE LLEGADAS TARDES Y SALIDAS TEMPRANAS, DESDE : '+str(fecha_ini)+' HASTA :'+str(fecha_fin)
+                ws['A1'].alignment=Alignment(horizontal="center",vertical="center")
+                ws['A1'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+                ws['A1'].fill=PatternFill(start_color='FFB833',end_color='FFB833',fill_type="solid")
+                ws.merge_cells('A1:F1')
+                ws['A3']='N°'
+                ws['B3']='CARNET'
+                ws['C3']='NOMBRES'
+                ws['D3']='APELLIDOS'
+                ws['E3']='TOTAL MINUTOS TARDE'
+                ws['F3']='TOTAL MINUTOS TEMPRANO'
                 fecha=datetime.strptime(fecha_fin,'%Y-%m-%d')
                 nfecha=(fecha+timedelta(days=1))
                 fechasumada=nfecha.strftime('%Y-%m-%d')
                 empleado=Empleado.objects.all()
                 marcacion=Marcacion.objects.exclude(fecha_marcacion__gte=fechasumada).filter(fecha_marcacion__gte=fecha_ini).order_by('fecha_marcacion')
+                cuenta=4
                 for em in empleado:
                     for marca in marcacion:
                         if marca.empleado_id==em.id:
@@ -344,11 +405,28 @@ def tardias_rango_fecha(request):
                                 m=datetime.strptime(muni,'%H:%M:%S')
                                 minutos=timedelta(days=0,hours=m.hour, minutes=m.minute, seconds=m.second)
                                 minutos+=minutos
+                            if marca.salida_temprana==True:
+                                muni=marca.minutos_salida_menos
+                                m=datetime.strptime(muni,'%H:%M:%S')
+                                minutos1=timedelta(days=0,hours=m.hour, minutes=m.minute, seconds=m.second)
+                                minutos1+=minutos1
                     
-                    lista=(str(em),"tiempo sumado de llgadas tarde en rango de fecha desde: |",str(fecha_ini)," | hasta : | ",str(fecha_fin)," | Total minutos tarde : ",str(minutos))               
+                    lista=(str(em),"tiempo sumado de llegadas tarde en rango de fecha desde: |",str(fecha_ini)," | hasta : | ",str(fecha_fin)," | Total minutos entradas tarde : ",str(minutos)," | Total minutos salidas temprana : ",str(minutos1))               
                     datos.append(lista)
+                    ws.cell(row=cuenta, column=1).value=cuenta-3
+                    ws.cell(row=cuenta, column=2).value=em.carnet_empleado
+                    ws.cell(row=cuenta, column=3).value=em.nombres
+                    ws.cell(row=cuenta, column=4).value=em.apellidos
+                    ws.cell(row=cuenta, column=5).value=minutos
+                    ws.cell(row=cuenta, column=6).value=minutos1
+                    cuenta+=1
                     
-                return render( request,'marcacion/minutostarde/rangotardia.html',{'datos':datos})
+                archivo="Suma_minutos_entrada_tarde_y_salida_temprana_"+str(fecha_ini)+"_"+str(fecha_fin)+".xlsx"
+                respuesta=HttpResponse(content_type="application/ms-excel")
+                contenido="attachment; filename={0}".format(archivo)
+                respuesta['Content-Disposition']=contenido
+                wb.save(respuesta)
+                return respuesta #render( request,'marcacion/minutostarde/rangotardia.html',{'datos':datos})
 
 def excelausencias(request):
     if request.method=='GET':
@@ -366,7 +444,7 @@ def excelausencias(request):
                 ws['A1'].alignment=Alignment(horizontal="center",vertical="center")
                 ws['A1'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
                 ws['A1'].fill=PatternFill(start_color='FFB833',end_color='FFB833',fill_type="solid")
-                ws.merge_cells('A1:Q1')
+                ws.merge_cells('A1:S1')
                 ws['A3']='CARNET'
                 ws['B3']='NOMBRES'
                 ws['C3']='APELLIDOS'
@@ -375,14 +453,17 @@ def excelausencias(request):
                 ws['F3']='RANGO DE HORA'
                 ws['G3']='FECHA'
                 ws['H3']='HORA ENTRADA'
-                ws['I3']='MINUTOS MAS'
-                ws['J3']='MINUTOS MENOS'
+                ws['I3']='MINUTOS TEMPRANO'
+                ws['J3']='MINUTOS TARDE'
                 ws['K3']='HORA SALIDA'
-                ws['L3']='SALIDA MAS'
-                ws['M3']='SALIDA MENOS'
-                ws['N3']='FECHA MODIFICACION'
-                ws['O3']='USUARIO MODIFICO'
-                ws['P3']='COMENTARIO'
+                ws['L3']='MINUTOS DESPUES DE SALIDA'
+                ws['M3']='MINUTOS ANTES DE LA SALIDA'
+                ws['N3']='FECHA JUSTIFICO ENTRADA TARDIA'
+                ws['O3']='USUARIO QUE REGISTRA'
+                ws['P3']='COMENTARIO ENTRADA TARDE'
+                ws['Q3']='FECHA JUSTIFICA SALIDA TEMPRANA'
+                ws['R3']='USUARIO QUE REGISTRA'
+                ws['S3']='COMENTARIO SALIDA TEMPRANA'
                 ws['A3'].alignment=Alignment(horizontal="center",vertical="center")
                 ws['A3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
                 ws['A3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
@@ -431,6 +512,15 @@ def excelausencias(request):
                 ws['P3'].alignment=Alignment(horizontal="center",vertical="center")
                 ws['P3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
                 ws['P3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+                ws['Q3'].alignment=Alignment(horizontal="center",vertical="center")
+                ws['Q3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+                ws['Q3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+                ws['R3'].alignment=Alignment(horizontal="center",vertical="center")
+                ws['R3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+                ws['R3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+                ws['S3'].alignment=Alignment(horizontal="center",vertical="center")
+                ws['S3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+                ws['S3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
                 cuenta=4
                 for m in marcacion:
                     ws.cell(row=cuenta, column=1).value=m.empleado.carnet_empleado
@@ -446,13 +536,16 @@ def excelausencias(request):
                     ws.cell(row=cuenta, column=11).value=m.hora_salida
                     ws.cell(row=cuenta, column=12).value=m.minutos_salida_mas
                     ws.cell(row=cuenta, column=13).value=m.minutos_salida_menos
-                    ws.cell(row=cuenta, column=14).value=m.fecha_modificacion
-                    ws.cell(row=cuenta, column=15).value=m.usuario_modifico
-                    ws.cell(row=cuenta, column=16).value=m.comentario
+                    ws.cell(row=cuenta, column=14).value=m.fecha_just_entrada
+                    ws.cell(row=cuenta, column=15).value=m.usuario_just_e
+                    ws.cell(row=cuenta, column=16).value=m.justifi_entrada
+                    ws.cell(row=cuenta, column=17).value=m.fecha_just_salida
+                    ws.cell(row=cuenta, column=18).value=m.usuario_just_s
+                    ws.cell(row=cuenta, column=19).value=m.justifi_salida
                     
                     
                     cuenta+=1
-                archivo="Marcaciones.xlsx"
+                archivo="Marcaciones-"+str(fecha_ini)+"-"+str(fecha_fin)+".xlsx"
                 respuesta=HttpResponse(content_type="application/ms-excel")
                 contenido="attachment; filename={0}".format(archivo)
                 respuesta['Content-Disposition']=contenido

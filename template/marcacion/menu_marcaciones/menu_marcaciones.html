@@ -13,7 +13,7 @@
             <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg "
                     href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i
                         class="fa fa-bars"></i></a>
-                <div class="top-left-part"><a class="logo" href="{% url 'index' %}"><b><img
+                <div class="top-left-part"><a class="logo" href="{% url 'menu' %}"><b><img
                                     {% load static %}
                                 src="{% static 'plugins/images/logo.png'%}" alt="home" /></b><span
                             class="hidden-xs"><img src="{% static 'plugins/images/reface.png'%}" alt="home" /></span></a>
@@ -88,7 +88,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-xs-12"> 
                                         <h4 >Lista marcaciones del dia</h4>  
-                                        <h5>Se despliega una lista de marcaciones realizadas en el dia con los campos de minutos que seran blancos si son positivos y anaranjados si son negativos</h5>  
+                                        <h5>Despliega una lista de marcaciones realizadas en el dia con los campos de minutos que seran blancos si son positivos y anaranjados si son negativos</h5>  
                                     </div>
                                     <div class="col-sm-12 col-xs-12" align="right">
                                     <a href="{% url 'listarmarcacion' %}">
@@ -133,7 +133,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-xs-12"> 
                                         <h4 >Justificar entradas tardias o salida temprana</h4>
-                                        <h5>Si hay que justificar una entrada tardia o salida temprana se puede realizar aqui en el mismo comentario </h5>    
+                                        <h5>Justifica una entrada tardia o salida temprana se puede realizar aqui en el mismo comentario </h5>    
                                     </div>
                                     <div class="col-sm-12 col-xs-12" >
                                         <form class="form-horizontal form-material" action="{% url 'entradas_o_salidas_tempranas'%}" method="POST">
@@ -191,8 +191,8 @@
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
                             <div class="white-box">
                                 <div class="row">
-                                    <div class="col-sm-6 col-xs-6"> 
-                                        <h4 >Consulta minutos tarde</h4>    
+                                    <div class="col-sm-12 col-xs-12"> 
+                                        <h4 >Descarga en Excel sumatoria de minutos entradas tarde y salidas tempranas</h4>    
                                     </div>
                                     
                                     <div class="col-sm-12 col-xs-12" >
@@ -209,7 +209,7 @@
                                                 </div>
                                             
                                                 <div class="col-sm-4 col-xs-4" align="right">
-                                                    <button class="btn">Consultar
+                                                    <button class="btn">DESCARGAR
                                                     </button>
                                                 </div>
                                             </div>

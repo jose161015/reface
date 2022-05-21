@@ -1,0 +1,108 @@
+{% extends 'empleado/menu_empleado/menu_empleado.html' %}
+{% block head %} Registro | Ocupacion {% endblock %}
+
+{% block link %}
+  
+{% endblock %}
+
+{% block menu %}
+<div class="row">
+                <div class="white-box">
+                    <div class="col-xs-12">
+                        <h4 class="page-title">Captura de imagenes y patrones faciales</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <a href="{% url 'menu_empleado' %}" class="btn btn-success">IR A MENU</a>
+                    </div>
+                    {% if msg %}
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                  <span aria-hidden = "true">&times;</span>
+                                </button>
+                                <strong >Error de solicitud : </strong>{{ msg }}
+                              </div>
+               		{% endif %}           
+                </div>
+                <!-- /.row -->
+                <!-- .row -->
+                
+                    <div class="col-md-4 col-xs-4">
+                        <div class="white-box">
+                            <div class="col-sm-6">
+                                        <a align="rigth" href="" class="btn btn-success">Tomar Foto </a>
+                            </div>
+                            <div class="col-sm-6">
+                                        <a align="center" href="" class="btn btn-success">Captura de patrones faciales </a>
+                            </div>
+                            
+                                            {% if empleado.foto %}
+                                                <img src="{{empleado.foto.url}}?nocache={{time}}" width="210" height="200" alt="img">
+                                            {% else %}
+                                                {% load static %}
+                                                <img align="centre" src=""
+                                                    width="360" height="360" >
+                                            {% endif %}
+                                            
+                                                           
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="white-box">
+                            
+                                <div class="form-group">
+                                    <label class="col-md-2">Numero de carnet</label>
+                                    <div class="col-md-10">
+                                        <input type="hidden" name="carnet" value="{{empleado.carnet_empleado}}" placeholder="Numero de carnet"
+                                            class="form-control form-control-line" readonly="readonly"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2">Nombres</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="nombre" value="{{empleado.nombres}}" placeholder="Nombres"
+                                            class="form-control form-control-line"> </div>
+                                    <label class="col-md-2">Apellidos</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="apellido" value="{{empleado.apellidos}}" placeholder="Apellidos"
+                                            class="form-control form-control-line"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Departamento </label>
+                                    <div class="col-sm-12">
+                                        <option value="{{empleado.departamento.id}}" >{{empleado.departamento}}</option>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Ocupacion</label>
+                                    <div class="col-sm-12">
+                                            <option value="{{empleado.ocupacion.id}}"  >{{empleado.ocupacion}}</option>
+                                        </select>
+                                    </div>
+                                </div>                                                                
+                                
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <div class="white-box">
+                            <div class="user-bg">
+                                <div class="overlay-box">
+                                    <div class="user-content">
+                                            {% if empleado.foto %}
+                                                <img src="{{empleado.foto.url}}?nocache={{time}}" width="210" height="200" alt="img">
+                                            {% else %}
+                                                {% load static %}
+                                                <img src="{% static 'plugins/images/empleado.png' %}"
+                                                    width="180" height="180" alt="img">
+                                            {% endif %}
+                                           
+                                    </div>                                     
+                                </div>                        
+                            </div>                            
+                        </div>
+                    </div>
+        
+                
+            
+</div>
+
+{% endblock %}

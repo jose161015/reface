@@ -18,12 +18,6 @@ urlpatterns = [
         path('dar_de_alta/<int:id>', dar_de_alta, name='dar_de_alta'),
         path('editarempleado/<int:id>', editarempleado, name='editarempleado'),
         path('actualizarempleado',actualizarempleado, name='actualizarempleado'),
-        #------------------- tomar foto -----------------------------------------------
-        path('tomarfoto/<int:id>', tomarfoto, name='tomarfoto'),
-        #------------------------- captura imagenes para entrenamiento-------------------
-        path('capturarostro/<int:id>', captura_rostro, name='capturarostro'),
-        #--------------------- ejecuta entrenamiento  --------------------------------
-        path('entrenar/<int:id>', entrenamiento, name='entrenar'),
         
         
         

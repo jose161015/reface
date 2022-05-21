@@ -1,40 +1,113 @@
 from django.shortcuts import redirect, render
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.db.models import Q
 from empleado.models import Departamento,Ocupacion,Empleado
 from horarios.models import AsigHorario, Turno
 from marcacion.models import*
 from empleado.Registro import entrenar
-import numpy as np
 import os
-
+from datetime import datetime
 import cv2
 
-# Create your views here.
 
 def menu_empleado(request):
     return render(request, 'empleado/menu_empleado/menu_empleado.html')
-
 
 def registrar_empleado(request):
     departamento=Departamento.objects.all()
     ocupacion=Ocupacion.objects.all()
     if request.method=="POST":
-        carnet=request.POST['carnet']
-        nombre=request.POST['nombre']
-        apellido=request.POST['apellido']
         dept=request.POST['departamento']
         oc=request.POST['ocupacion']
-        depart=Departamento.objects.get(id=dept)
-        ocu=Ocupacion.objects.get(id=oc)
-        try:
-            Empleado.objects.create(carnet_empleado=carnet,
-                                    nombres=nombre,apellidos=apellido, 
-                                    departamento=depart,ocupacion=ocu)
-            return redirect('menu_empleado')
-        except Exception as ms:
-            print (ms)
-            return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,'ocupacion':ocupacion,'msg':"Carnet ya se encuentra registrado consulte con el administrador"}) 
+        if dept!="Elegir departamento":
+            if oc!="Elegir ocupacion":
+                carnet=request.POST['carnet']
+                empleado=Empleado.objects.filter(carnet_empleado=carnet)
+                if empleado.exists():
+                    render(request,'empleado/reg_empleado/registrar_empleado.html',
+                                  {'departamento':departamento,'ocupacion':ocupacion,
+                                   'msg':"Carnet ya se encuentra registrado consulte con el administrador"})
+                else:
+                    dir_faces = os.getcwd()
+                    myfile = request.FILES['image']
+                    fs = FileSystemStorage()
+                    filename = fs.save(myfile.name, myfile)
+                    
+                    uploaded_file_url = fs.url(filename)
+                    
+                    full_url=dir_faces+"/"+uploaded_file_url[1:]
+
+                    path_to_image=full_url
+                    cascPath=dir_faces+"/"+"haarcascades/haarcascade_frontalface_default.xml"
+                    original_image = cv2.imread(path_to_image)
+                    if original_image is not None:
+                        
+                        faceCascade=cv2.CascadeClassifier(cascPath)
+                        gray=cv2.cvtColor(original_image,cv2.COLOR_BGR2GRAY)
+                        faces=faceCascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                        
+                        if len(faces)<=0:
+                            os.remove(full_url)
+                            return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,
+                                                                                                   'ocupacion':ocupacion,
+                                                                                                   'msg':"No habia ningun rostro en imagen por favor elija una imagen con rostro visible y de calidad"})
+                        elif len(faces)>1:
+                            os.remove(full_url)
+                            return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,
+                                                                                                   'ocupacion':ocupacion,
+                                                                                                   'msg':"Habia mas de un rostro en imagen por favor elija una imagen con rostro visible y de la persona que registra, asegurese que el fondo de la imagen este limpio"})
+                        else:
+                            img_width, img_height = 500, 500
+                            size = 6
+                            pathcore = os.path.join(dir_faces, "CoreDatos")
+                            path = os.path.join(pathcore, carnet)
+                            if not os.path.isdir(pathcore):
+                                os.mkdir(pathcore)
+                                
+                                # Si no hay una carpeta con el nombre ingresado entonces se crea
+                            if not os.path.isdir(path):
+                                os.mkdir(path)
+                                
+                            mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
+                            faces1 = faceCascade.detectMultiScale(mini)    
+                            faces1 = sorted(faces1, key=lambda x: x[3])
+                            face_i = faces1[0]
+                            (x, y, w, h) = [v * size for v in face_i]
+                            face1 = gray[y:y + h, x:x + w]
+                            face_resize = cv2.resize(face1, (img_width, img_height))
+                            cv2.rectangle(original_image, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                                 #Ponemos el nombre en el rectagulo
+                            cv2.putText(original_image, carnet, (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 255))        
+                               
+                                #Obtenemos el nombre de la foto
+                                #Despues de la ultima sumamos 1 para continuar con los demas nombres
+                            pin=sorted([int(n[:n.find('.')]) for n in os.listdir(path)
+                            if n[0]!='.' ]+[0])[-1] + 1        #Metemos la foto en el directorio
+                            cv2.imwrite('%s/%s.png' % (path, pin), face_resize)
+                            entrenar()
+                            
+                            nombre=request.POST['nombre']
+                            apellido=request.POST['apellido']
+                            dept=request.POST['departamento']
+                            oc=request.POST['ocupacion']
+                            depart=Departamento.objects.get(id=dept)
+                            ocu=Ocupacion.objects.get(id=oc)
+                            Empleado.objects.create(carnet_empleado=carnet,
+                                                nombres=nombre,
+                                                apellidos=apellido, 
+                                                departamento=depart,
+                                                ocupacion=ocu,
+                                                foto=filename,
+                                                tiene_modelo=True)
+                            return redirect('menu_empleado')
+            else:
+                return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,'ocupacion':ocupacion,'msg':"Debe elegir ocupacion que desempeña"})
+        else:
+            return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,'ocupacion':ocupacion,'msg':"Debe elegir departamento de pertenencia"})
+                    
     return render(request,'empleado/reg_empleado/registrar_empleado.html',{'departamento':departamento,'ocupacion':ocupacion})
 
 def reg_departamento(request):
@@ -58,10 +131,11 @@ def actualizardpt(request):
         Departamento.objects.filter(id=id).update(nom_departamento=nom)
         return redirect('registrardepartamento')
 
-
+@never_cache
 def listarempleado(request):
+    time=datetime.now()
     empleado=Empleado.objects.all()
-    return render(request,'empleado/listarempleado/listar_empleado.html',{'empleado':empleado,'count':empleado.count()})
+    return render(request,'empleado/listarempleado/listar_empleado.html',{'empleado':empleado,'count':empleado.count(),'time':time})
 
 
 def dar_de_baja(request, id):
@@ -72,28 +146,105 @@ def dar_de_baja(request, id):
 def dar_de_alta(request, id):
     Empleado.objects.filter(id=id).update(es_activo=1)
     return redirect('listaempleado')
-
+@never_cache
 def editarempleado(request, id):
+    time=datetime.now()
     departamento=Departamento.objects.all()
     ocupacion=Ocupacion.objects.all()
     empleado=Empleado.objects.filter(id=id).first()
-    return render(request,'empleado/editarempleado/actualizar_empleado.html',{'empleado':empleado,'departamento':departamento,'ocupacion':ocupacion})
+    return render(request,'empleado/editarempleado/actualizar_empleado.html',{'empleado':empleado,'departamento':departamento,'ocupacion':ocupacion,'time':time})
 
 
 def actualizarempleado(request):
+    
     if request.method=='POST':
-        nombre=request.POST['nombre']
-        apellido=request.POST['apellido']
-        dept=request.POST['departamento']
-        ocup=request.POST['ocupacion']
+        id=request.POST['id']
         carnet=request.POST['carnet']
-        Empleado.objects.filter(carnet_empleado=carnet).update(nombres=nombre,
-                                                                apellidos=apellido,departamento=dept,ocupacion=ocup) 
+        try:
+            myfile = request.FILES['image']
+            dir_faces = os.getcwd()
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            
+            uploaded_file_url = fs.url(filename)
+            
+            full_url=dir_faces+"/"+uploaded_file_url[1:]
+
+            path_to_image=full_url
+            cascPath=dir_faces+"/"+"haarcascades/haarcascade_frontalface_default.xml"
+            original_image = cv2.imread(path_to_image)
+            if original_image is not None:
+               
+                faceCascade=cv2.CascadeClassifier(cascPath)
+                gray=cv2.cvtColor(original_image,cv2.COLOR_BGR2GRAY)
+                faces=faceCascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                
+                if len(faces)==0:
+                    os.remove(full_url)
+                    return redirect('editarempleado/'+id)
+                elif len(faces)>1:
+                    os.remove(full_url)
+                    return redirect('editarempleado/'+id)
+                else:
+                    img_width, img_height = 500, 500
+                    size = 6
+                    pathcore = os.path.join(dir_faces, "CoreDatos")
+                    path = os.path.join(pathcore, carnet)
+                    if not os.path.isdir(pathcore):
+                        os.mkdir(pathcore)
+                        
+                            # Si no hay una carpeta con el nombre ingresado entonces se crea
+                    if not os.path.isdir(path):
+                        os.mkdir(path)
+                        
+                    mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
+                    faces1 = faceCascade.detectMultiScale(mini)    
+                    faces1 = sorted(faces1, key=lambda x: x[3])
+                    face_i = faces1[0]
+                    (x, y, w, h) = [v * size for v in face_i]
+                    face1 = gray[y:y + h, x:x + w]
+                    face_resize = cv2.resize(face1, (img_width, img_height))
+                    cv2.rectangle(original_image, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                    #Ponemos el nombre en el rectagulo
+                    cv2.putText(original_image, carnet, (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 255))        
+                    #Obtenemos el nombre de la foto
+                    #Despues de la ultima sumamos 1 para continuar con los demas nombres
+                    pin=sorted([int(n[:n.find('.')]) for n in os.listdir(path)
+                        if n[0]!='.' ]+[0])[-1] + 1        #Metemos la foto en el directorio
+                    cv2.imwrite('%s/%s.png' % (path, pin), face_resize)
+                    
+                    entrenar()
+                    nombre=request.POST['nombre']
+                    apellido=request.POST['apellido']
+                    dept=request.POST['departamento']
+                    ocup=request.POST['ocupacion']
+                    
+                    
+                    Empleado.objects.filter(carnet_empleado=carnet).update(foto=filename, nombres=nombre,
+                                                                            apellidos=apellido,departamento=dept,ocupacion=ocup)
+                    
+            
+        except:
+            nombre=request.POST['nombre']
+            apellido=request.POST['apellido']
+            dept=request.POST['departamento']
+            ocup=request.POST['ocupacion']
+            
+            
+            Empleado.objects.filter(carnet_empleado=carnet).update(nombres=nombre,
+                                                                    apellidos=apellido,departamento=dept,ocupacion=ocup)
+            
+            
+             
     return redirect('menu_empleado')
 
+def elegircaramara(request,id):
+    contex=Urlcamaraip.objects.filter(es_interna=False)
+    return render(request,'empleado/elegircamara/elegircamara.html',{'id':id,'context':contex})
 
-
-
+def monitor(request):
+    
+    return render(request,'empleado/monitor/monitor_captura.html')
 
 
 def reg_ocupacion(request):
@@ -119,141 +270,9 @@ def actualizarocupacion(request):
 
 
 def lista_sin_captura(request):
+    time=datetime.now()
     listasincaptura=Empleado.objects.filter(tiene_modelo=0)
-    return render(request, 'empleado/listempleado_sin/listasincaptura.html',{'listasincaptura':listasincaptura})
-
-
-
-
-
-#--------------------------------------------------------------------------------------------------------------------------
-def captura_rostro(request,id):
-    coreDatos = os.getcwd()
-    pathcore = os.path.join(coreDatos,"media")
-    path = os.path.join(pathcore,"fotos_empleados")
-    if not os.path.isdir(pathcore):
-        os.mkdir(pathcore)
-        print("Se creo la carpeta CoreDatos")
-        #Si no hay una carpeta con el nombre ingresado entonces se crea
-    if not os.path.isdir(path):
-        os.mkdir(path)  
-    e=Empleado.objects.filter(id=id).first()
-    cap = cv2.VideoCapture(0) # video capture source camera (Here webcam of laptop)
-    while(True):
-        ret,frame = cap.read() # return a single frame in variable `frame`
-        cv2.imshow("toma de imagen: ("+str(e)+") Presione ( y ) para capturar",frame) #display the captured image
-        if cv2.waitKey(1) & 0xFF == ord("y"): #save on pressing "y"
-            cv2.imwrite('%s/%s.png' % (path,id),frame)
-            cv2.destroyAllWindows()
-            foto="fotos_empleados/"+str(id)+".png"
-            Empleado.objects.filter(id=id).update(foto=foto)
-            break
-
-    cap.release()
-    return redirect('listasincaptura')
-
-#------------------------------ se ejecuta despues de captura rostro-----------------------------
-def entrenamiento(request,id):
-    e=Empleado.objects.filter(id=id).first()
-    carnet=e.carnet_empleado
-    nombre=e.nombres
-    cantidadimagenes=150
-    dir_faces = os.getcwd()
-    path = os.path.join(dir_faces,carnet)
-    size = 4
-    coreDatos = os.getcwd()
-    pathcore = os.path.join(coreDatos,"CoreDatos")
-    path = os.path.join(pathcore,carnet)
-    print("Ruta actual: " + path)
-    if not os.path.isdir(pathcore):
-        os.mkdir(pathcore)
-        print("Se creo la carpeta CoreDatos")
-        #Si no hay una carpeta con el nombre ingresado entonces se crea
-    if not os.path.isdir(path):
-        os.mkdir(path)
-        print("Se creo la base de imagenes: " + carnet)
-        #cargamos la plantilla e inicializamos la webcam
-    face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
-    cap = cv2.VideoCapture(0)
-    img_width, img_height = 100, 100
-    print("Registrando su rostro...")
-    #Ciclo para tomar fotografias
-    while True: #captura imagenes
-        #leemos un frame y lo guardamos
-        rval, img = cap.read()
-        img = cv2.flip(img, 1,0)
-            #convertimos la imagen a blanco y negro
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            #redimensionar la imagen
-        mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
-        """buscamos las coordenadas de los rostros (si los hay) y
-        guardamos su posicion"""
-        faces = face_cascade.detectMultiScale(mini)    
-        faces = sorted(faces, key=lambda x: x[3])
-        if faces:
-            face_i = faces[0]
-            (x, y, w, h) = [v * size for v in face_i]
-            face = gray[y:y + h, x:x + w]
-            face_resize = cv2.resize(face, (img_width, img_height))
-            #Dibujamos un rectangulo en las coordenadas del rostro
-            coreDatos = os.getcwd()
-            pathcore = os.path.join(coreDatos, "CoreDatos")
-            path = os.path.join(pathcore, carnet)
-            cantimgs = len(os.listdir(path))
-            if cantimgs < cantidadimagenes: 
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
-                    #Ponemos el nombre en el rectagulo
-                cv2.putText(img, nombre, (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 255))        
-                    #El nombre de cada foto es el numero del ciclo
-                    #Obtenemos el nombre de la foto
-                    #Despues de la ultima sumamos 1 para continuar con los demas nombres
-                pin=sorted([int(n[:n.find('.')]) for n in os.listdir(path)
-                        if n[0]!='.' ]+[0])[-1] + 1        #Metemos la foto en el directorio
-                cv2.imwrite('%s/%s.png' % (path, pin), face_resize)
-            else:
-                cv2.putText(img, 'Finish, press Q to quit', (x - 10, y - 10),
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0),2)
-            #Mostramos la imagen
-        cv2.imshow('Registrando rostro de: '+nombre, img)
-            #Si se presiona la tecla ESC se cierra el programa
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            entrenar()
-            Empleado.objects.filter(id=id).update(tiene_modelo=1)
-            break
-    cap.release()
-    cv2.destroyAllWindows()
-    
-    return redirect('listasincaptura')
-#------------------------------- solo toma foto--------------------------
-def tomarfoto(request,id):
-    coreDatos = os.getcwd()
-    pathcore = os.path.join(coreDatos,"media")
-    path = os.path.join(pathcore,"fotos_empleados")
-    if not os.path.isdir(pathcore):
-        os.mkdir(pathcore)
-        print("Se creo la carpeta CoreDatos")
-        #Si no hay una carpeta con el nombre ingresado entonces se crea
-    if not os.path.isdir(path):
-        os.mkdir(path)  
-    e=Empleado.objects.filter(id=id).first()
-    cap = cv2.VideoCapture(0) # video capture source camera (Here webcam of laptop)
-    while(True):
-        ret,frame = cap.read() # return a single frame in variable `frame`
-        cv2.imshow("toma de imagen: ("+str(e)+") Presione ( y ) para capturar",frame) #display the captured image
-        if cv2.waitKey(1) & 0xFF == ord("y"): #save on pressing "y"
-            cv2.imwrite('%s/%s.png' % (path,id),frame)
-            cv2.destroyAllWindows()
-            foto="fotos_empleados/"+str(id)+".png"
-            Empleado.objects.filter(id=id).update(foto=foto)
-            break
-
-    cap.release()
-    return redirect('editarempleado',id)
-
-
-
-
-
+    return render(request, 'empleado/listempleado_sin/listasincaptura.html',{'listasincaptura':listasincaptura,'time':time})
 
 def detalle_empleado(request):
     if request.method=='GET':

@@ -1,4 +1,11 @@
 {% extends 'empleado/menu_empleado/menu_empleado.html' %}
+
+{% block meta %}
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Last-Modified" content="0">
+<meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+<meta http-equiv="Pragma" content="no-cache">
+{% endblock %}
 {% block head %} Actualizar | Empleado {% endblock %}
 
 {% block link %}
@@ -12,16 +19,18 @@
                         <h4 class="page-title">Formulario de Actualizacion</h4>
                     </div>
                     <div class="col-sm-12">
-                        <a href="{% url 'menu_empleado' %}" class="btn btn-success">Regresar</a>
+                        <a href="{% url 'listaempleado' %}" class="btn btn-success">Regresar</a>
                     </div>
-                    {% if msg %}
-                              <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
-                                  <span aria-hidden = "true">&times;</span>
-                                </button>
-                                <strong >Error de solicitud : </strong>{{ msg }}
-                              </div>
-               		{% endif %}           
+                    <div class="col-sm-12">
+                        {% if msg %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                                    <span aria-hidden = "true">&times;</span>
+                                    </button>
+                                    <strong >Error de solicitud : </strong>{{ msg }}
+                                </div>
+                        {% endif %} 
+                    </div>          
                 </div>
                 <!-- /.row -->
                 <!-- .row -->
@@ -30,9 +39,7 @@
                         <div class="white-box">
                             <div class="user-bg">
                                 <div class="overlay-box">
-                                    <div class="col-sm-12">
-                                        <a href="{% url 'tomarfoto' empleado.id %}" class="btn btn-success">Tomar Foto </a>
-                                    </div>
+                                    
                                     <div class="user-content">
                                             {% if empleado.foto %}
                                                 <img src="{{empleado.foto.url}}" width="210" height="200" alt="img">
@@ -49,11 +56,12 @@
                     </div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form class="form-horizontal form-material" action="{% url 'actualizarempleado' %}" method="POST">
+                            <form class="form-horizontal form-material" action="{% url 'actualizarempleado' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label class="col-md-2">Numero de carnet</label>
                                     <div class="col-md-10">
+                                        <input type="hidden" name="id" value="{{empleado.id}}" >
                                         <input type="text" name="carnet" value="{{empleado.carnet_empleado}}" placeholder="Numero de carnet"
                                             class="form-control form-control-line" readonly="readonly"> </div>
                                 </div>
@@ -88,7 +96,13 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                </div>                                                                
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Cargar una imagen del empleado</label>
+                                    <div class="col-sm-12">
+                                        <input  accept="image/*" class="form-control" type="file" name="image">
+                                    </div>
+                                </div>                                                                  
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <button class="btn btn-success"><i class="f fa-save" ></i><spam class="hide-menu">Guardar</spam></button>

@@ -63,7 +63,7 @@
                                                             {% else %}
                                                                 <td><strong>{{i.minutos_salida_mas}}</strong></td>
                                                             {% endif %}
-                                                            <td><a href="{% url 'justificar' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                            <td><a href="{% url 'justificar_entrada' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
                                                         {% endif %}
                                                     </tr>
                                                     {% endfor %}
@@ -111,7 +111,7 @@
                                                             {% else %}
                                                                 <td><strong>{{i.minutos_salida_mas}}</strong></td>
                                                             {% endif %}
-                                                            <td><a href="{% url 'justificar' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
+                                                            <td><a href="{% url 'justificar_salida' i.id %}" class="waves-effect" ><i class="fa fa-pencil fa-fw"></i><span class="hide-menu">Editar</span></a></td>
                                                         {% endif %}
                                                     </tr>
                                                     {% endfor %}

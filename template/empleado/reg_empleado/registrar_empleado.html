@@ -2,10 +2,11 @@
 {% block head %} Registro | Empleado {% endblock %}
 
 {% block link %}
-  
+
 {% endblock %}
 
 {% block menu %}
+
 <div class="container">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -14,25 +15,28 @@
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
             <h4 class="page-title">Formulario de registro</h4>
         </div>
-        {% if msg %}
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
-                    <span aria-hidden = "true">&times;</span>
-                </button>
-                <strong >Error de solicitud : </strong>{{ msg }}
-            </div>
-        {% endif %}           
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            {% if msg %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss = "alert" aria-label = "Close">
+                        <span aria-hidden = "true">&times;</span>
+                    </button>
+                    <strong >Error: </strong>{{ msg }}
                 </div>
+            {% endif %}           
+        </div>
+    </div>
                 <!-- /.row -->
                 <!-- .row -->
-        <div class="row">
+        <div class="row row bg-title">
             <div class="col-md-4 col-xs-12">
                 <div class="white-box">
                     <div class="user-bg"> 
                         <div class="overlay-box">
                             <div class="user-content ">
                                 {% load static %}
-                                <img src="{% static 'plugins/images/empleado.png' %}" width="180" height="180" alt="img">
+                                                <img src="{% static 'plugins/images/empleado.png' %}"
+                                                    width="180" height="180" alt="img">
                             </div>  
                         </div>
                     </div>
@@ -46,17 +50,17 @@
                                     <label class="col-md-2">Numero de carnet</label>
                                     <div class="col-md-10">
                                         <input type="text" name="carnet" placeholder="Numero de carnet"
-                                            class="form-control form-control-line"> </div>
+                                            class="form-control form-control-line" required> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2">Nombres</label>
                                     <div class="col-md-4">
                                         <input type="text" name="nombre" placeholder="Nombres"
-                                            class="form-control form-control-line"> </div>
+                                            class="form-control form-control-line" required> </div>
                                     <label class="col-md-2">Apellidos</label>
                                     <div class="col-md-4">
                                         <input type="text" name="apellido"  placeholder="Apellidos"
-                                            class="form-control form-control-line"> </div>
+                                            class="form-control form-control-line" required> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-12">Seleccione Departamento de pertenencia</label>
@@ -72,12 +76,19 @@
                                 <div class="form-group">
                                     <label class="col-sm-12">Seleccione ocupacion a desempeñar</label>
                                     <div class="col-sm-12">
-                                        <select name="ocupacion" class="form-control form-control-line">
+                                        <select name="ocupacion" class="form-control form-control-line" >
                                             <option >Elegir ocupacion</option>
                                             {% for o in ocupacion %}
                                             <option value="{{o.id}} " >{{o.nom_ocupacion}}</option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Cargar una imagen del empleado</label>
+                                    <div class="col-sm-12">
+                                        <input  accept="image/*" class="form-control" type="file" name="image" id="example-tel-input"
+                                               required>
                                     </div>
                                 </div>                                                                
                                 <div class="form-group">

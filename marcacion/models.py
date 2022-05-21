@@ -32,9 +32,12 @@ class Marcacion(models.Model):
     minutos_salida_menos = models.CharField(verbose_name='Minutos salida temprana',blank=True, null=True,max_length=10)
     entrada_tardia = models.BooleanField(default= False,verbose_name='Entrada tardia')
     salida_temprana = models.BooleanField(default= False, verbose_name='Salida temprana')
-    fecha_modificacion = models.DateField(blank=True, null=True, verbose_name='Fecha modificacion')
-    usuario_modifico = models.CharField(max_length=50,blank=True, null=True, verbose_name='Usuario modifico')
-    comentario = models.CharField(max_length=250, blank=True, null=True, verbose_name='Comentario')
+    fecha_just_entrada = models.DateField(blank=True, null=True, verbose_name='Fecha justificacion')
+    usuario_just_e = models.CharField(max_length=50,blank=True, null=True, verbose_name='Usuario modifico')
+    justifi_entrada = models.CharField(max_length=250, blank=True, null=True, verbose_name='Comentario')
+    fecha_just_salida = models.DateField(blank=True, null=True, verbose_name='Fecha justificacion')
+    usuario_just_s = models.CharField(max_length=50,blank=True, null=True, verbose_name='Usuario modifico')
+    justifi_salida = models.CharField(max_length=250, blank=True, null=True, verbose_name='Comentario')
     # modelo marcacion se utiliza para registrar una entrada y salida en el mismo registro conforme al horario asignado
     # al empleado 
     class Meta:
