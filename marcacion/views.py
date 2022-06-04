@@ -1,3 +1,4 @@
+from certifi import where
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse
 from django.http.response import HttpResponse
@@ -277,18 +278,14 @@ def actualizarausencia(request):
 
 #seccion de reconocimiento facial 
 def reg_camara_ip(request):
+    camip=Urlcamaraip.objects.all()
     if request.method=='POST':
         unidad_control=request.POST['unidad']
         url_camara_ip=request.POST['url']
-        es_interna=request.POST['es']
-        if es_interna=='si':
-            Urlcamaraip.objects.create(unidad_control=unidad_control,url_camara_ip=url_camara_ip,es_interna=True)
-            return redirect('menu_marcaciones')
-        else:
-            Urlcamaraip.objects.create(unidad_control=unidad_control,url_camara_ip=url_camara_ip)
-            return redirect('menu_marcaciones')
+        Urlcamaraip.objects.create(unidad_control=unidad_control,url_camara_ip=url_camara_ip,es_interna=False)
+        return redirect('reg_camara_ip')
     
-    return render(request,'marcacion/reg_camara_ip/register_url.html')
+    return render(request,'marcacion/reg_camara_ip/register_url.html',{'camip':camip})
 
 @gzip.gzip_page
 def recibir_url(request):
@@ -551,3 +548,16 @@ def excelausencias(request):
                 respuesta['Content-Disposition']=contenido
                 wb.save(respuesta)
                 return respuesta 
+
+def buscar_punto_control(request,id):
+    camip=Urlcamaraip.objects.get(id=id)
+    
+    return render(request,'marcacion/reg_camara_ip/editarcamara_ip.html', {'camip':camip})
+
+def editar_camara_ip(request):
+    if request.method=='POST':
+        id=request.POST['id']
+        unidad=request.POST['unidad']
+        url=request.POST['url']
+        Urlcamaraip.objects.filter(id=id).update(unidad_control=unidad,url_camara_ip=url)
+        return redirect('reg_camara_ip')

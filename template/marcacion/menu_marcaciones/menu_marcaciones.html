@@ -53,29 +53,28 @@
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
                             <div class="white-box">
                                 <div class="row">
-                                <div class="col-sm-12 col-xs-12"> 
-                                        <h4 >Realizar una marcacion manual con numero de carnet de empleado</h4>
-                                        <h5>Tenga en cuenta que para realizar una marcacion de salida debera esperar almenos 5 minutos para realizarla</h5>    
+                                    <div class="col-sm-12 col-xs-12"> 
+                                            <h4 >Realizar una marcacion manual con numero de carnet de empleado</h4>
+                                            <h5>Tenga en cuenta que para realizar una marcacion de salida posterior a la entrada del mismo empleado debera esperar almenos 5 minutos para realizarla</h5>    
                                     </div>
                                     <div class="col-sm-12 col-xs-12" >
-                                        <form class="form-horizontal form-material" action="{% url 'marcacionmanualentrada'%}" method="POST">
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                                <label class="col-md-1">Carnet:</label>
-                                                <div class="col-sm-7 col-xs-7">
-                                                    
-                                                    <input type="text" name="carnet" 
-                                                        class="form-control form-control-line"required="required"> 
+                                            <form class="form-horizontal form-material" action="{% url 'marcacionmanualentrada'%}" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 col-xs-2">
+                                                    <label >Carnet:</label>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <input type="text" name="carnet" class="form-control form-control-line"required="required"> 
+                                                    </div>
+                                                    <div class="col-sm-4 col-xs-4"align="right">
+                                                        <button class="btn">
+                                                            <img  {% load static %} src="{% static 'plugins/images/registrar.png'%}" alt="img" width="110" height="110" />
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                            </form>
                                             
-                                                <div class="col-sm-4 col-xs-4"align="right">
-                                                    <button class="btn">
-                                                        <img  {% load static %} src="{% static 'plugins/images/registrar.png'%}" alt="img" width="110" height="110" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        
                                     </div>
                                      
                                 </div>
@@ -91,9 +90,9 @@
                                         <h5>Despliega una lista de marcaciones realizadas en el dia con los campos de minutos que seran blancos si son positivos y anaranjados si son negativos</h5>  
                                     </div>
                                     <div class="col-sm-12 col-xs-12" align="right">
-                                    <a href="{% url 'listarmarcacion' %}">
-                                        <img  {% load static %} src="{% static 'plugins/images/marca_dia.png'%}" alt="img" width="110" height="110" />
-                                    </a>
+                                        <a href="{% url 'listarmarcacion' %}">
+                                            <img  {% load static %} src="{% static 'plugins/images/marca_dia.png'%}" alt="img" width="110" height="110" />
+                                        </a>
                                     </div> 
                                 </div>
                             </div>

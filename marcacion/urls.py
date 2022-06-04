@@ -18,5 +18,7 @@ urlpatterns = [
     path('minutostarde',tardias_rango_fecha, name='sumaminutostarde'),
     path('descargaexcel',excelausencias, name='descargaexcel'),
     path('reg_camara_ip', reg_camara_ip, name='reg_camara_ip' ),
+    path('reg_camara_ip/<int:id>', buscar_punto_control, name='punto_control_camara_ip' ),
+    path('editar_camara_ip', editar_camara_ip, name='editar_camara_ip' ),
     path('index', recibir_url, name='recibir_url' ),
     ]

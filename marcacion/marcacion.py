@@ -15,13 +15,13 @@ def dia():
     return dia_n
 
 def registrarentrada(carnet):
-   
     id_empleado=Empleado.objects.filter(carnet_empleado=carnet).first()                                              
-    fecha = now.strftime('%Y-%m-%d')
     msg=""
     if id_empleado:
         if id_empleado.es_activo==True:
             horario=AsigHorario.objects.filter(empleado_id=id_empleado.id)
+            now = datetime.now()
+            fecha = now.strftime('%Y-%m-%d')
             if horario:
                 for hora in horario:
                     if str(hora.fecha_inicio)<=str(fecha): 

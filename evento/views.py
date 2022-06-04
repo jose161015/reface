@@ -2,7 +2,11 @@ from evento.models import CodigoEvento, Evento
 from django.shortcuts import redirect, render,HttpResponse
 from empleado.models import Empleado
 from datetime import date, datetime, timedelta
-from inicio.pdf_utils import render_to_pdf
+from openpyxl.styles.borders import Side
+from openpyxl.styles.fills import PatternFill
+from openpyxl.workbook.workbook import Workbook
+from openpyxl import Workbook
+from openpyxl.styles import Alignment,Border
 
 # Create your views here.
 def menu_evento(request):
@@ -68,11 +72,12 @@ def actualizarevento(request):
 def eventorango(request):
     if request.method=='GET':
         f1=request.GET['fecha1']
-        f2=request.GET['fecha2']
+        f2=request.GET['fecha2']  
         fecha=datetime.strptime(f2,'%Y-%m-%d')
         nfecha=(fecha+timedelta(days=1))
         fechasumada=nfecha.strftime('%Y-%m-%d')
-        registro_rango=Evento.objects.exclude(fecha_inicio__gte=fechasumada).filter(fecha_inicio__gte=f1).order_by('fecha_inicio')
+        print(fechasumada)
+        registro_rango=Evento.objects.exclude(fecha_inicio__gte=fechasumada).filter(fecha_fin__gte=f1).order_by('fecha_inicio')
         contenido={'registro_rango':registro_rango,'count':registro_rango.count(),'fecha1':f1,'fecha2':f2}
         return render(request,'eventorango.html',contenido)
 
@@ -83,8 +88,89 @@ def eventorangopdf(request):
         fecha=datetime.strptime(f2,'%Y-%m-%d')
         nfecha=(fecha+timedelta(days=1))
         fechasumada=nfecha.strftime('%Y-%m-%d')
-        registro_rango=Evento.objects.exclude(fecha_inicio__gte=fechasumada).filter(fecha_inicio__gte=f1).order_by('fecha_inicio')
-        contenido={'registro_rango':registro_rango,'count':registro_rango.count(),'fecha1':f1,'fecha2':f2}
-        pdf=render_to_pdf('evento/eventorangopdf/eventorangopdf.html',contenido)
-    return HttpResponse(pdf,content_type='aplicaction.pdf/pdf')
-    
+        registro_rango=Evento.objects.exclude(fecha_inicio__gte=fechasumada).filter(fecha_fin__gte=f1).order_by('fecha_inicio')
+        wb= Workbook()
+        ws= wb.active
+        ws['A1']='EVENTOS POR RANGO DE FECHA, DESDE : '+str(f1)+' HASTA :'+str(f2)
+        ws['A1'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['A1'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['A1'].fill=PatternFill(start_color='FFB833',end_color='FFB833',fill_type="solid")
+        ws.merge_cells('A1:M1')
+        hoy=datetime.now()
+        ws['A2']='FECHA DE GENERACION DE DOCUMENTO : '+str(hoy)
+        ws['A3']='CARNET'
+        ws['B3']='NOMBRES'
+        ws['C3']='APELLIDOS'
+        ws['D3']='DEPARTAMENTO'
+        ws['E3']='OCUPACION'
+        ws['F3']='COD. EVENTO'
+        ws['G3']='DESCRIPCION'
+        ws['H3']='FECHA INICIO'
+        ws['I3']='FECHA FINALIZACION'
+        ws['J3']='RESPONSABLE QUE FIRMA'
+        ws['K3']='MOTIVO'
+        ws['L3']='FECHA REGISTRO'
+        ws['M3']='RESPONSABLE DE REGISTRO'
+        
+        ws['A3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['A3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['A3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['B3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['B3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['B3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['C3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['C3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['C3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['D3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['D3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['D3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['E3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['E3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['E3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['F3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['F3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['F3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['G3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['G3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['G3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['H3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['H3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['H3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['I3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['I3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['I3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['J3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['J3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['J3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['K3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['K3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['K3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['L3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['L3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['L3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        ws['M3'].alignment=Alignment(horizontal="center",vertical="center")
+        ws['M3'].border= Border(left=Side(border_style="thin"),right=Side(border_style="thin"),top=Side(border_style="thin"),bottom=Side(border_style="thin"))
+        ws['M3'].fill=PatternFill(start_color='33F0FF',end_color='33F0FF',fill_type="solid")
+        cuenta=4
+        for m in registro_rango:
+            ws.cell(row=cuenta, column=1).value=m.empleado.carnet_empleado
+            ws.cell(row=cuenta, column=2).value=m.empleado.nombres
+            ws.cell(row=cuenta, column=3).value=m.empleado.apellidos
+            ws.cell(row=cuenta, column=4).value=m.empleado.departamento.nom_departamento
+            ws.cell(row=cuenta, column=5).value=m.empleado.ocupacion.nom_ocupacion
+            ws.cell(row=cuenta, column=6).value=m.codigo_evento.cod_evento
+            ws.cell(row=cuenta, column=7).value=m.codigo_evento.descripcion_evento
+            ws.cell(row=cuenta, column=8).value=m.fecha_inicio
+            ws.cell(row=cuenta, column=9).value=m.fecha_fin
+            ws.cell(row=cuenta, column=10).value=m.autorizado_por
+            ws.cell(row=cuenta, column=11).value=m.justificacion
+            ws.cell(row=cuenta, column=12).value=m.fecha_registro
+            ws.cell(row=cuenta, column=13).value=m.usuario_registro       
+            cuenta+=1
+        archivo="Eventos-"+str(f1)+"-"+str(f2)+".xlsx"
+        respuesta=HttpResponse(content_type="application/ms-excel")
+        contenido="attachment; filename={0}".format(archivo)
+        respuesta['Content-Disposition']=contenido
+        wb.save(respuesta)
+        return respuesta 
+        

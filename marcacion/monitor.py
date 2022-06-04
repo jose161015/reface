@@ -35,16 +35,17 @@ class Reconocimientofacial(object):
                 hora= now.strftime('%H:%M:%S')
                 if result[1] < 70:
                     try:
-                        
-                        print(result)
+                        nombre=""
                         #con esto se resuelve que los valores esten fuera de rango
                         carnet =imagePaths[result[0]]
-                        nombre=registrarentrada(carnet)
-                        print(nombre)
+                        try:
+                            nombre=registrarentrada(carnet)
+                        except Exception as e:
+                            nombre=e
                         #se hace consulta a la base de datos para obtener el nombre de la persona
                         #a quien pertenece el numero de carnet
                         cv2.putText(frame, '{}'.format(imagePaths[result[0]]),(x, y-25),2,1.1,(0, 255, 0),1,cv2.LINE_AA)
-                        cv2.putText(frame, str(nombre)+" "+str(hora), (x+150, y-25), 2, 0.8, (255, 0, 255), 1, cv2.LINE_AA)
+                        cv2.putText(frame, str(nombre)+" "+str(hora), (x+250, y-25), 2, 0.8, (255, 0, 255), 1, cv2.LINE_AA)
                         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 4)
                         # obteniendo el nombre del reconocido para uso de BD
                         #print(result[1])
